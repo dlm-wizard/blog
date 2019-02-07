@@ -12,13 +12,14 @@
 	
 
 二、
-     1、koa中response.send、response.rounded、response.json发生了什么事，浏览器为什么能识别到它是一个json结构或是html
-     2、koa-bodyparser怎么来解析request
+     	1、koa中response.send、response.rounded、response.json发生了什么事，浏览器为什么能识别到它是一个json结构或是html
+     	2、koa-bodyparser怎么来解析request
 	 
 三、node
-     1、进程和线程的区别(一个node实例就是一个进程，node是单线程，通过事件循环来实现异步)
-     2、node文件查找优先级
-	 3、npm2和npm3+有什么区别
+     	1、进程和线程的区别(一个node实例就是一个进程，node是单线程，通过事件循环来实现异步)
+     	2、node文件查找优先级
+	3、npm2和npm3+有什么区别
+	4、express框架的设计思想(难)
 	 
 	 
 	 
@@ -38,8 +39,8 @@
 一、css
 	1.CSS选择器有哪些
 	2.如何实现H5手机端的适配
-	3.
-	4.
+	3.rem、flex的区别（root em）
+	4.em和px的区别
 
 一、css实现
 	1.移动端适配1px
@@ -88,7 +89,7 @@
 	 					js面试
 介绍AST（Abstract Syntax Tree）抽象语法树
 
-五、基础知识
+一、基础知识
      1、== 和 ===的区别，什么情况下用相等==
      2、介绍事件委托(代理)以及优缺点
 	 3、两个对象如何比较
@@ -97,7 +98,7 @@
 
 
 
-五、this关键字
+二、this关键字
      1、介绍this各种情况
      2、介绍事件委托(代理)以及优缺点
 	 3、bind、call、apply的区别
@@ -105,7 +106,7 @@
 	 5、介绍箭头函数的this
 
 
-五、es6
+三、es6
      1、介绍暂时性死区
      2、ES6中的map和原生的对象有什么区别
 	 3、bind、call、apply的区别
@@ -115,11 +116,11 @@
 	 5、ES6中let块作用域是怎么实现的
 	 
 	 
-五、setTimeout 和 setInterval的机制
+四、setTimeout 和 setInterval的机制
      1、Promise和setTimeout执行先后的区别
      2、setInterval需要注意的点
 	 3、定时器为什么是不精确的
-	 4、
+	 4、Promise和setTimeout的区别（Event Loop）
 	 
 五、深拷贝和浅拷贝
      1、loadsh深拷贝实现原理
@@ -127,7 +128,7 @@
 	 3、
 	 4、
 
-五、闭包和原型链
+六、闭包和原型链
      1、介绍下原型链（解决的是继承问题吗）
 	 	(1)如何继承
 		(2)使用原型最大的好处
@@ -144,7 +145,7 @@
 	 6、bind、call、apply的区别
 	 
 
-一、同源与跨域			=>		https://segmentfault.com/a/1190000012469713
+七、同源与跨域			=>		https://segmentfault.com/a/1190000012469713
 	1.介绍下浏览器跨域
 		(1)如何解决跨域问题
 		(2)jsonp方案需要服务端怎么配合
@@ -155,7 +156,7 @@
 	3.介绍自己写过的中间件(有没有设计cluster)
 	
 
-二、异步回调
+八、异步回调
      1、promise、async有什么区别
 	 	(1)对async、await的理解，内部原理
 		(2)使用async会注意哪些东西
@@ -171,9 +172,13 @@
 	 4、JS异步解决方案的发展历程以及优缺点
 	 5、介绍各种异步方案
 	 
-三、函数节流防抖
+九、函数节流防抖
      1、搜索请求如何处理（防抖）
      2、master挂了的话pm2怎么处理
+
+四、图片懒加载和预加载(项目)
+     1、图片懒加载怎么实现的
+     2、讲vue-lazyloader原理，手写伪代码
 	 
 四、js手写代码
      1、文件断点续传(难)

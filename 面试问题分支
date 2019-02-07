@@ -20,6 +20,7 @@
      	2、node文件查找优先级
 	3、npm2和npm3+有什么区别
 	4、express框架的设计思想(难)
+		(1)express里面登录的session服务怎么样实现分布式服务(难)
 	 
 	 
 	 
@@ -136,6 +137,7 @@
 			1)还有哪些地方会内存泄露
 	 2、对闭包的看法，为什么要用闭包
 	 	(1)闭包的核心是什么
+		(2)闭包的缺点，如何实现闭包
 	 3、JS的原型
 	 	(1)prototype和——proto——区别
 		(2)_construct是什么
@@ -193,7 +195,7 @@
      2、介绍事件委托(代理)以及优缺点
 	 3、垃圾回收时栈和堆的区别
 	 
-	 	 					vue面试	
+	 	 				vue面试	
 
 一、webpack(难)
 	1.使用过webpack里面哪些plugin和loader(webpack整个生命周期，loader和plugin有什么区别)

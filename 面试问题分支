@@ -23,6 +23,7 @@
 		(1)express里面登录的session服务怎么样实现分布式服务(难)
 		(2)express中间件如何实现
 		(3)express和koa2的区别
+		(4)express动态路由匹配，源码设计
 	5、node错误处理(难)
 	6、用node干了什么，mvc+模板引擎，多页面应用
 
@@ -240,28 +241,30 @@
 jQuery和vue对比,jquery和vue的本质区别
 
 一、webpack(难)
-	1.使用过webpack里面哪些plugin和loader(webpack整个生命周期，loader和plugin有什么区别)
+	1.webpack热更新原理
+	2.使用过webpack里面哪些plugin和loader(webpack整个生命周期，loader和plugin有什么区别)
 		(1)Webpack中loader的作用
-	2.webpack里面的插件是怎么实现的
+	3.webpack里面的插件是怎么实现的
 		(1)webpack有个插件可以解决css兼容性问题你知道吗（postcss-loader）
 		(2)webpack的插件大致流程
-	3.抽取公共文件是怎么配置的
-	4.(1)import { Button } from 'antd'，打包的时候只打包button，分模块加载，是怎么做到的
+	4.抽取公共文件是怎么配置的
+	5.(1)import { Button } from 'antd'，打包的时候只打包button，分模块加载，是怎么做到的
  	  (2)使用import时，webpack对node_modules里的依赖会做什么
-	5.一般怎么组织CSS（Webpack）
-	6.webpack如何配sass，需要配哪些loader
-	7.配css需要哪些loader
-	8.如何配置把js、css、html单独打包成一个文件
-	9.webpack工程构建工具怎么样用
+	6.一般怎么组织CSS（Webpack）
+	7.webpack如何配sass，需要配哪些loader
+	8.配css需要哪些loader
+	9.如何配置把js、css、html单独打包成一个文件
+	10.webpack工程构建工具怎么样用
 		(1)怎么配webpack
-	10.webpack的了解，整个流程，插件开发，loader开发
-	11.vue如何做多页面应用，知道webpack能配这个吗
-	12.webpack的spa，为什么选择spa，前端路由原理
+	11.webpack的了解，整个流程，插件开发，loader开发
+	12.vue如何做多页面应用，知道webpack能配这个吗
+	13.webpack的spa，为什么选择spa，前端路由原理
 
 二、vue基础
      	1、介绍虚拟DOM(难)
 	 	(1)虚拟DOM主要做了什么、本身是什么（JS对象）
-		(2)vue响应式原理、依赖收集、监听数组
+		(2)vue响应式原理、计算属性、依赖收集、监听数组(***重要***)
+			1)渲染watcher到虚拟dom
 		(3)为什么虚拟DOM比真实DOM性能好
 			1)为什么虚拟dom就快了呢(转化为js数据结构，最小化dom操作，最后render插入)
      	2、vue双向绑定原理
@@ -276,12 +279,15 @@ jQuery和vue对比,jquery和vue的本质区别
 	7、vue 整个流程，双绑，complier，htmlparser，render函数
 	8、vue1和vue2的区别,vue3的了解
 	9、使用Vue进行移动端开发时如何调用原生API?
+	10、手写vue mixins方法
+	11、抽取过哪些vue组件
 	 
 三、eventBus vuex
      	1、Emit事件怎么发，需要引入什么
 	 	(1)@emit的实现原理
     	2、vuex的状态管理的原理是什么
 	 	(1)说一下vuex（复杂关系的组件，统一的状态管理），再说一下单向数据流（类比react的state），那我子父组件通信呢（事件总线）
+			1)设计一个单点登录系统，类似阿里系那种
 		(2)为什么需要vuex，他是做什么的
 	3、vuex数据流的理解（把流程图背一遍，然后用原生vue+storage和vuex做比较）
 	 
@@ -294,6 +300,9 @@ jQuery和vue对比,jquery和vue的本质区别
 五、Vue的SPA
      	1、什么是单页项目
      	2、介绍单页面应用和多页面应用
+	
+vue入门demo：实现百度、360】搜狗的搜索框 => 	https://github.com/lavyun/vue-demo-search
+vue：实现一个联想搜索组件
 	 
 	 
 	 					http面试
@@ -303,9 +312,10 @@ jQuery和vue对比,jquery和vue的本质区别
 	1.介绍下HTTP状态码
 		(1)403、301、302、304是什么
 	2.http报文的请求会有几个部分
-	3.从输入URL到页面加载全过程
-		(1)tcp3次握手
-		(2)js、css阻塞页面那些问题，异步加载js（async、defer、动态创建）
+	3.从输入URL到页面加载全过程 => https://segmentfault.com/a/1190000006879700
+		(1)JS如何计算浏览器的渲染时间的
+		(2)tcp3次握手
+		(3)js、css阻塞页面那些问题，异步加载js（async、defer、动态创建）
 
 二、
 	1.常见http请求头
@@ -382,6 +392,7 @@ jQuery和vue对比,jquery和vue的本质区别
 	2.介绍中介者模式
 	3.观察者和订阅-发布的区别，各自用在哪里
 		(1)Node.js EventEmitter发布订阅模式实现(难、重要)
+		(2)实现一个发布订阅系统，包括on、emit、off等(难)
 	
 
 二、单例、工厂、观察者项目中实际场景
@@ -427,10 +438,9 @@ jQuery和vue对比,jquery和vue的本质区别
 	1.如何判断链表是否有环
 	2.用JS模拟一个双向链表
 	3.介绍自己写过的中间件(有没有设计cluster)
-	
 
 二、树
-     	1、介绍二叉搜索树的特点
+     	1、介绍排序二叉树(二叉搜索树)的特点
      	2、反转二叉树以及时间复杂度
 	3、二叉树层序遍历
 	4、b树、b+树、红黑树
@@ -438,12 +448,12 @@ jQuery和vue对比,jquery和vue的本质区别
 		（我用的是bfs，不过出了一点问题，面试官叫我用递归试一下。递归解法类似剑指offer的二叉树深度，只是for in 循环整个ul取最大值）
 
 三、基础算法
-     	1、排序所有算法都要掌握到滚瓜熟练
+     	1、排序所有算法都要掌握到滚瓜熟练(**尤其是快排、时间复杂度、优化**)
 	2、介绍下DFS深度优先
 	3、手写数组去重函数(重要)
 	4、手写数组扁平化函数(重要)
 
-四、		=>			https://segmentfault.com/a/1190000011758238
+四、手写算法		=>			https://segmentfault.com/a/1190000011758238
      	1、sum(2, 3)实现sum(2)(3)的效果
      	2、取数组的最大值(ES5、ES6)
 	3、写个函数判断是不是回文序列
@@ -455,6 +465,7 @@ jQuery和vue对比,jquery和vue的本质区别
 	9、正则匹配属于qq.com的
 	10、大数相加(难)
 	11、从给定的无序、不重复的数组data中，取出n个数，使其相加和为sum。并给出算法的时间/空间复杂度 。(不需要找到所有的解，找到一个解即可)
+	12、思考(怎么判断一个点是否在圆形内、正方形内)
 
 
 Q:
@@ -462,8 +473,7 @@ Q:
 2、栈和堆的区别
 	(1)栈和堆具体怎么存储
 3、如何对相对路径引用进行优化
-4、从输入一个url到浏览器页面展示都经历了哪些过程 => https://segmentfault.com/a/1190000006879700
-	(1)JS如何计算浏览器的渲染时间的
+4、websocket握手过程
 5、如何对相对路径引用进行优化
 6、遍历数组处理用for循环还有什么方法吗
 7、了解前后端交互吗（restful的api）那怎么传数据（跨域、不跨域情况）跨域怎么跨（cors、jsonp）
@@ -474,7 +484,7 @@ Q:
 
 
 
-
+快手喜欢考智力题
 
 
 

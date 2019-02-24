@@ -1,0 +1,28 @@
+幽灵空白节点 [ 宽度为0字符 ]
+  Each line box starts with a zero-width inline box with the element's font and line height properties.We call that imaginary box a "strut"。
+display:inline 的元素如果内部为空，是不会在所处行框产生幽灵空白节点的，
+而display:inline-block 的元素即使内部为空 也是会产生幽灵空白节点的
+
+‘inline-block’的基线是正常流中最后一个line box的基线
+除非，这个line box里面既没有line boxes或者本身’overflow’属性的计算值而不是’visible’, 这种情况下基线是margin底边缘。
+
+
+<!-- 列表的两端对齐布局 -->
+
+<div style="text-align: justify;">
+    <img src="img/mm1.jpg" width="128">
+    <img src="img/mm1.jpg" width="128">
+    <img src="img/mm1.jpg" width="128">
+    <img src="img/mm1.jpg" width="128">
+    <!-- i是占位符，让任意个数列表最后一行也是对齐排列 -->
+    <i class="justify-fix"></i>
+    <i class="justify-fix"></i>
+    <i class="justify-fix"></i>
+</div>
+
+/* 列表的两端对齐布局 */
+.justify-fix { display: inline-block; width: 128px; }
+div { line-height: 0; }
+1.改造占位<i>元素的基线 <i class="justify-fix"> x </i>
+2.改造“幽灵空白节点”的基线位置 div { font-size: 0; }
+3.vertical-align .justify-fix { + vertical-align: top; }

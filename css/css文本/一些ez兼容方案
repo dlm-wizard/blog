@@ -1,0 +1,6 @@
+<!-- 针对chorome浏览器默认最小字体12px的解决方案 -->
+  . compatibility {
+    ...
+    -webkit-transform-origin-x: 0;
+    -webkit-transform: scale(0.80);
+  }

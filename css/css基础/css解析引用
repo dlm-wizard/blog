@@ -1,0 +1,14 @@
+1. @import-->引用 [ 为css服务 ]
+<style type="text/css" media="screen">
+  @import url("http://www.taobao.com/home/css/global/v2.0.css?t=20070518.css");
+</style>
+
+2.link-->引用 [ 为当前页服务 ]
+<link rel="stylesheet" rev="stylesheet" href="default.css" type="text/css" media="all" />
+
+*差别1：老祖宗的差别。link 属于 XHTML 标签，而 @import 完全是 CSS 提供的一种方式。
+    link 标签除了可以加载 CSS 外，还可以做很多其它的事情，比如定义 RSS，定义 rel 连接属性等，@import 就只能加载 CSS 了。
+*差别2：加载顺序的差别。当一个页面被加载的时候，
+    link 引用的 CSS 会同时被加载，而 @import 引用的 CSS 会等到页面全部被下载完再被加载。所以有时候浏览 @import 加载 CSS 的页面时开始会没有样式。
+*差别3：兼容性的差别。由于 @import 是 CSS2.1 提出的所以老的浏览器不支持，@import 只有在 IE5 以上的才能识别，而 link 标签无此问题。
+*差别4：使用 dom 控制样式时的差别。当使用 javascript 控制 dom 去改变样式的时候，只能使用 link 标签，因为 @import 不是 dom 可以控制的。

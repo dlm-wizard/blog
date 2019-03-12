@@ -1,0 +1,92 @@
+<body>
+  <div id="app">
+    <!-- level {{ point <= 100 ? '普通会员' : 'vip会员'   }} -->
+    level {{ level }}
+    
+    <!-- 实时更新 -->
+    <input type="text" v-model="level1">
+    <input type="text" v-model="level2">
+  </div>
+</body>
+
+  <script src="../vue-clientTest/libs/vue/vue.min.js"></script>
+  
+  <script>
+    new Vue({
+      el: "#app",
+      data: {
+        // level: '普通会员',
+        point: 200,
+        level1: '普通会员',
+        level2: 'vip会员'
+      },
+      computed: {
+        /* 虽然把level放到了computed当中,依然是实时性刷新
+         * === 把level放在data属性中, 值通过function返回 
+         * 同步跟新到dom中
+         */
+        level: function () {
+          if (this.point<=100) {
+            return this.level1
+          }
+          return this.level2
+        }
+      },
+    })
+  </script>
+
+
+// ...
+computed: {
+  fullName: {
+    // getter
+    get: function () {
+      return this.firstName + ' ' + this.lastName
+    },
+    // setter
+    set: function (newValue) {
+      var names = newValue.split(' ')
+      this.firstName = names[0]
+      this.lastName = names[names.length - 1]
+    }
+  }
+}
+// ...
+
+
+listShow: {
+      // 想改变listShow，改变fold就可以
+
+      get: function () {
+        return !this.fold
+      },
+      set: function (newVal) { // 每次listShow值变化，都会进该回调
+        if (!this.totalCount) {
+          this.fold = true
+        }
+        /* 计算属性的值不会因此改变，只会触发setter回调
+         * get、set都不能再定义自身属性 [ 死循环>堆栈溢出 ]
+         */
+        this.listShow = newVal '错误示例' 
+
+
+
+        this.fold = newVal '正确' 
+
+
+        if (newVal) { // 通过计算属性赋值作为触发条件
+          this.$nextTick(() => { 
+            if (!this.scroll) {
+              this.scroll = new BScroll(this.$refs.listContent, {
+                click: true
+              })
+            } else {
+              this.scroll.refresh()
+            }
+          })
+        }
+      }
+    }
+  }
+  
+  

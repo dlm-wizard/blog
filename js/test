@@ -1,0 +1,28 @@
+listShow: {
+      get: function () {
+        return !this.fold
+      },
+      set: function (newVal) {
+        if (!this.totalCount) {
+          this.fold = true
+          return false
+        }
+        console.log(this.listShow)
+        let show = !this.fold
+        if (show) { // 数据变化dom不一定变化，而better-scroll严重依赖dom执行
+          this.$nextTick(() => { // 因为listShow不断变化，但我们不要要重复的实例
+            if (!this.scroll) {
+              this.scroll = new BScroll(this.$refs.listContent, {
+                click: true
+              })
+            } else {
+              this.scroll.refresh() // 也会重新计算高度差决定是否滚动
+            }
+          })
+        }
+      }
+    },
+    toggleListShow (listShowVal) {listShowVal
+      this.listShow = listShowVal
+    }
+  },

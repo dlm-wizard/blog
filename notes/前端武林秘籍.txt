@@ -112,6 +112,18 @@ link 与 @import的区别：
 		<!-- 列表的下的空白空间 -->
 
 		<div><img src="mm1.jpg"></div>
+		
+		‘inline-block’的基线是正常流中最后一个line box的基线
+		除非，这个 line box 里面既没有 line boxes 或者本身 ’overflow’ 属性的计算值而不是 ’visible’ , 这种情况下基线
+		是 margin 底边缘。
+		
+		## 一些ez兼容方案
+
+		<!-- 针对chorome浏览器默认最小字体12px的解决方案 -->
+		  . compatibility {
+		    ...
+		    -webkit-transform-origin-x: 0;
+		    -webkit-transform: scale(0.80);
     
     
      2. 一些有趣的事实

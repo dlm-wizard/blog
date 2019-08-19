@@ -1,0 +1,97 @@
+<style>
+    #wrap,
+    #wrap1 {
+        display: flex;
+        padding-top: 30px;
+        flex-wrap: wrap;
+        background-color: burlywood;
+        height: 150px;
+    }
+
+    #wrap {
+        align-content: center;
+        height: 250px;
+    }
+
+    #wrap1 {
+        align-items: flex-start;
+        border-top: 5px dashed white;
+    }
+    #wrap1 .plan:nth-child(2) {
+        align-self: flex-end;
+    }
+     
+    .plan {
+        color: white;
+        background-color: pink;
+        width: 30%;
+        height: 60px;
+        line-height: 50px;
+        font-weight: bold;
+    }
+
+    .plan:nth-child(1),
+    .plan:nth-child(2),
+    .plan:nth-child(3) {
+        border-top: 3px solid rgb(224, 248, 87);
+        border-bottom: 3px solid rgb(224, 248, 87);
+    }
+    .plan:nth-child(4),
+    .plan:nth-child(5) {
+        border-top: 3px solid rgb(255, 86, 122);
+        border-bottom: 3px solid rgb(255, 86, 122);
+    }
+    .plan:first-child {
+        border-left: 3px solid rgb(224, 248, 87);
+    }
+    .plan:last-child {
+        border-right: 3px solid rgb(255, 86, 122);
+    }
+    
+    .plan:nth-child(3) {
+        border-right: 3px solid rgb(224, 248, 87);
+    }
+    .plan:nth-child(4) {
+        border-left: 3px solid rgb(255, 86, 122);
+    }
+
+    #wrap,
+    #wrap1,
+    #wrap2,
+    h2 {
+        font-family: "Avenir", Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        color: #2c3e50;
+    }
+    
+</style>
+
+<body>
+    <div id="wrap">
+        <!-- <h2 class="subtitle">hello reuseable & effective</h2> -->
+        <plan v-for="plan in plans" :name="plan"></plan>
+    </div>
+    <div id="wrap1">
+        <plan v-for="plan in plans" :name="plan"></plan>
+    </div>
+    <div id="wrap2">
+        <plan v-for="plan in plans" :name="plan"></plan>
+    </div>
+</body>
+
+<template id="plan">
+    <div class="plan">
+        <div class="item">
+            <div class="desc">
+                <span>{{name}}</span>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="./main.js"></script>
+
+

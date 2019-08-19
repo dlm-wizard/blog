@@ -1,0 +1,145 @@
+[知乎-从一个奇怪的错误出发理解 Vue 基本概念](https://zhuanlan.zhihu.com/p/25486761)
+
+一、属性
+
+    1. 自定义属性 props 
+       props 最好用对象的写法 [设置类型、默认值或自定义校验属性的值], 使用 props 的数组写法，这样的组件往往是不严谨的
+       
+       驼峰->短横线 [html 大小写不敏感]
+       
+       v-bind: 传递非 String 类型数据 [vm 实例内查找]
+       
+    2. prop 验证 [组件创建之前]
+    
+       I. type: 类型检查 [primitive（包括symbol）、Array、Object、Date、Function、构造函数]
+         
+         (1) 构造函数：通过 instanceof 检查类型
+         (2) null、undefined 会通过任何类型的验证
+       
+       II. required: 必填
+       
+       III. default: 默认值
+       
+            default: function () {/*对象或数组必须从工厂函数中获取*/
+                return { message: 'hello' }
+              }
+       
+       IIII. validator: 自定义验证函数
+       
+
+
+
+    2. 非 prop 的属性
+       一个非 prop 属性是指传向一个组件，但是该组件并没有相应 prop 定义的属性
+       
+     父组件：对于绝大多数特性来说，从外部提供给组件的值会替换掉组件内部设置好的值，class 与 style 会智能合并
+     
+        <date-input
+          date-picker="activated"
+          class="theme-dark"
+          type="String"/*会替换掉 type="date" 并把它破坏！*/
+        ></date-input>
+     
+     子组件：   
+     
+        <input type="date" class="form-control">/*form-control theme-dark*/
+    
+    inheritAttrs
+        $attrs表示没有继承数据的对象，格式为{属性名：属性值}
+       不希望组件根元素的特性继承，组件上不作为 props 的属性会被继承 [class、style 除外]
+
+
+
+    3. data 与 props 区别
+       深入响应式原理
+      
+        (1) data 动态数据，
+              在 vm 实例中，任何情况下，我们都可以随意改变它的数据结构和类型，不会被环境影响
+
+        (2) props 静态数据
+              Vue 是单向数据流，在数据传递时始终不能改变它的数据类型，子组件也不允许直接操作传递过来的 props 数据
+ 
+
+        (3) 组件通信 -> 单向数据流
+        
+            props 的数据都是通过父组件或者更高层级的组件数据或者字面量的方式进行传递的，不允许直接操作改变各自实例中的 props 数据
+       
+
+            (1) copy 到 data 属性中
+
+                    export default {
+                      props: {
+                        type: String
+                      },
+                      data () {
+                        return {
+                          currentType: this.type/*赋值操作*/
+                        }
+                      }
+                    }
+
+            (2) 计算属性
+            
+                    export default {
+                      props: {
+                        type: String
+                      },
+                      computed: {
+                        normalizedType: function () {
+                          return this.type.toUpperCase();
+                        }
+                      }
+                    }
+             
+             
+             (3) this.$emit + @event
+                 通过事件实现对一个 prop 进行「双向数据绑定」
+              
+               
+
+props.gif
+
+父组件向子组件 props 里传递了 msg 和 show 两个值，都用了.sync 修饰符，进行双向绑定。
+不过.sync 虽好，但也有限制，比如：
+
+1）不能和表达式一起使用（如v-bind:title.sync="doc.title + '!'"是无效的）；
+2）不能用在字面量对象上（如v-bind.sync="{ title: doc.title }"是无法正常工作的）。
+
+方法4：将父组件中的数据包装成对象传递给子组件
+这是因为在 JavaScript 中对象和数组是通过引用传入的，所以对于一个数组或对象类型的 prop 来说，在子组件中改变这个对象或数组本身将会影响到父组件的状态。比如上例中在子组件中修改父组件传递过来的数组arr,从而改变父组件的状态。
+
+二、事件
+    1. 原生 Js 事件驱动
+       选择器寻找操作节点 -> 节点事件监听 -> 触发事件回调 [Jquery 封装 DOM 操作]
+    
+       真正的 DOM 元素是非常庞大的，因为浏览器的标准就把 DOM 设计的非常复杂。当我们频繁的去做 DOM 更新，会产生一定的性能问题
+       
+       继承链：HTMLParagraphElement -> HTMLElement -> Element -> Node -> EventTarget -> Function -> Object
+    
+
+    2. 数据驱动
+       视图是由数据驱动生成的，我们对视图的修改，不会直接操作 DOM，而是通过修改数据 [详看原理]
+   
+    3. 修饰符
+       Vue 提供了大量的修饰符封装了这些过滤和判断, 关注与数据逻辑，而不用处理 DOM 细节
+
+            (1) 表单输入
+            
+                lazy：change 事件 --- 输入完所有内容触发 [防抖]
+                trim：过滤首尾空格
+                number：parseFloat()
+
+            (2) 事件修饰符
+            
+                .stop：event.stopPropagation()
+                .prevent：event.preventDefault()
+    
+三、插槽
+   vue 实现的一套内容分发的 API，将 <slot> 元素作为承载分发内容的出口
+   
+   父级模板里的所有内容都是在父级作用域中编译的；子模板里的所有内容都是在子作用域中编译的
+   
+    1.作用域插槽
+
+    2.v-slot新语法
+  

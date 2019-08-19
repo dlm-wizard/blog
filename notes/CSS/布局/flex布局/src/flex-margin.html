@@ -1,0 +1,52 @@
+<style>
+        #app {
+            display: flex;
+            /* align-items: center; */
+            padding-top: 30px;
+            justify-content: center;
+            background-color: burlywood;
+            height: 300px;
+        }
+        .plan {
+            color: white;
+            background-color: pink;
+            width: 70px;
+            height: 50px;
+            line-height: 50px;
+            font-weight: bold;
+            border-radius: 20px;
+            margin: 0 40px;
+        }
+        .plan:last-child {
+            margin-left: auto;
+        }
+        #app,
+        h2 {
+            font-family: "Avenir", Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-align: center;
+            color: #2c3e50;
+        }
+    </style>
+    
+    <body>
+        <div id="app">
+            <!-- <h2 class="subtitle">hello reuseable & effective</h2> -->
+            <plan v-for="plan in plans" :name="plan"></plan>
+        </div>
+    </body>
+    
+    <template id="plan">
+        <div class="plan">
+            <div class="item">
+                <div class="desc">
+                    <span>{{name}}</span>
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="./main.js"></script>
+

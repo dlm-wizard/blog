@@ -1,0 +1,294 @@
+          
+                                    移动端适配
+
+
+一：css pixels
+
+  1. PX 到底是什么？
+     它是图像显示的基本单元，既不是一个确定的物理量，也不是一个点或者小方块，而是一个抽象概念「CSS 和 JS 使用」
+     浏览器内一切长度都是，CSS像素的单位是 px。
+
+    1.1 上下文
+    
+      所以在谈论 px(像素) 时一定要清楚它的上下文! 一定要清楚它的上下文!
+      
+      不同的设备，图像基本采样单元是不同的
+      dpi(dash per inch) / ppi(pixel per inch): 放到显示器上说的是每英寸多少物理像素及显示器设备的点距
+
+
+    1.2 图像产生模糊的原因
+        
+        (1) 位图（png、jpg...）「由一个个像素点构成」
+
+            保持一定像素的长度在不同设备输出上看上去的大小总是差不多：准备分辨率不同的资源（按照设备物理像素进行换算）
+            在dpr=2的屏幕上展示两倍图(@2x)，在dpr=3的屏幕上展示三倍图(@3x)
+            
+            a. 媒体查询：[缺点：在浏览器大小改变时，需要改变的样式太多，那么多套样式代码会很繁琐]
+            
+                .avatar{
+                    background-image: url(conardLi_1x.png);
+                }
+                @media only screen and (-webkit-min-device-pixel-ratio:2){
+                    .avatar{
+                        background-image: url(conardLi_2x.png);
+                    }
+                }
+                
+            b. background-image: -webkit-image-set() [多张图片]
+               <img srcset=""> [多张图片]
+             
+             d. Js 拼接图片 url
+                 
+                /*获取设备像素比，遍历所有图片，替换图片地址*/
+                const dpr = window.devicePixelRatio;
+                const images =  document.querySelectorAll('img');
+                images.forEach((img)=>{
+                  img.src.replace(".", `@${dpr}x.`);/*根据dpr拼接图片地址*/
+                })
+              
+             e. 使用 svg（Scalable Vector Graphics
+                不同于位图的基于像素，SVG 则是属于对图像的形状描述，所以它本质上是文本文件，体积较小，且不管放大多少倍都不会失真。
+
+
+二：
+
+    2.1 dp(device pixels)
+    
+         设备像素(物理像素)，顾名思义，显示屏是由一个个物理像素点组成的，通过控制每个像素点的颜色，使屏幕显示出不同的图像，单位 pt
+
+
+    2.2 dip (Device independent Pixel)：设备独立像素
+    
+          未缩放的 css 像素：
+            我们必须用一种单位来同时告诉不同分辨率的手机，它们的界面上显示元素的大小是多少 [统一单位]
+    
+
+    2.3 设备像素比(dpr)
+    
+        (1) 未缩放状态下，设备像素 和 css 像素 的初始比例关系「指在移动开发中1个css像素占用多少设备像素」
+            dpr = 设备像素/css像素  = dp/dip
+        
+            css：@media (-webkit-min-device-pixel-ratio: 2){ }/*使用媒体查询区分*/
+              
+            Js: window.devicePixelRatio
+
+            // 横纵整体缩放
+            iphone5 为例: 分辨率 320*568px => dpr = 1
+            640*1136/320*568 = 4 => 分辨率 640*1136px, 4个设备像素显示一个 css 像素 => dpr = 2
+            
+        (2) 页面的缩放系数
+            写 css 时，用到最多的单位是 px「css 像素」，当页面缩放比为 100% 时，一个CSS像素等于一个设备独立像素
+            当用户对浏览器进行了放大，CSS像素会被放大（这时一个CSS像素会跨越更多的物理像素）
+            
+              页面的缩放系数 = css 像素 / 未缩放的 css 像素
+        
+        
+    2.4 ppi(pixels per inch)：ppi 越高，单位面积的像素越多，也就越清晰
+    
+        每英寸的像素点（设备像素），已知屏幕分辨率和主对角线的尺寸，则 ppi 等于：
+    
+         var 斜边像素数 = V(1920^2+1080^2) V代表开根号 
+         var ppi = 斜边像素数/5.5 = 401ppi
+         
+
+    2.5：像素的栗子   
+         图片分辨率其实是指图片含有的设备像素数
+         800 x 400：图片分别在垂直和水平上所具有的像素点数为800和400
+         
+
+三：viewport -- 顶级元素 % 是基于布局视口来计算的
+   浏览器窗口显示内容区域
+
+
+    3.1 布局视口 [html.clientWidth]
+        
+          (1) 为 pc 设计的网站放到移动设备上显示时，必然会因为移动设备的 viewport 太窄，而挤作一团，甚至布局什么的都会乱掉
+          (2) 浏览器给布局视口一个默认值，大部分为 980px
+        
+
+    3.2 视觉视口 [window.innerWidth]
+    
+          (1) 因为视觉视口的宽度是大于浏览器可视区域的宽度的，我们还需要一个 viewport 来表示浏览器可视区域的大小
+          (2) 浏览器可视区域的大小 <-- （!!关键）可缩放
+
+    3.3 理想视口 [screen.width] 
+          
+          (1) 不需要用户缩放和横向滚动条就能正常的查看网站的所有内容
+        
+              实际上：缩放是相对于 理想视口 缩放的 
+              =>
+              initial-scale(页面的缩放系数) = 理想视口/视觉视口「更精确」
+
+          理想视口并没有一个固定的尺寸，不同的设备拥有有不同的ideal viewport
+
+
+四：meta name="viewport"
+
+    1. meta viewport
+
+        (1) width：device-width | 正整数「px， 定义布局视口的宽度」
+        (2) height：device-height | 正整数「 px， 定义布局视口的高度」
+        (3) initial-scale：页面初始缩放比率
+        (4) minimum-scale：0
+        (5) maximum-scale：缩放的最大值
+        (6) user-scalable：yes | no「no，用户将不能放大或缩小网页」
+        
+    
+    2. 移动端适配
+    
+        1) width=device-width => 布局视口等于理想视口
+        
+        2) initial-scale=1 => 视觉视口等于理想视口（详见上文页面的缩放系数）
+
+        组合的原因：
+        
+           width=device-width  
+              就是 iphone、ipad、IE 横竖屏部分 [都为竖屏]
+           
+           initial-scale=1
+             IE 横竖屏部分 [都为竖屏]
+             
+            <meta name="viewport" content="width=device-width, initial-scale=1"> -- 应该两者都写上去
+            
+
+    4.4. 动态改变meta viewport标签
+    
+        <meta id="testViewport" name="viewport" content="width = 380">
+        <script>
+          var mvp = document.getElementById('testViewport');
+          mvp.setAttribute('content','width=480');
+        </script>
+
+
+
+五：1px 问题
+
+    为了适配各种屏幕，我们写代码时一般使用设备独立像素来对页面进行布局
+
+    1. border-image
+        基于media查询判断不同的设备像素比给定不同的border-image
+
+         .border_1px{
+          border-bottom: 1px solid #000;
+        }
+        @media only screen and (-webkit-min-device-pixel-ratio:2){
+            .border_1px{
+                border-bottom: none;
+                border-width: 0 0 1px 0;
+                border-image: url(../img/1pxline.png) 0 0 2 0 stretch;
+            }
+        }
+        
+    
+    2. background-image：
+        和border-image类似，准备一张符合条件的边框背景图，模拟在背景上
+    
+              .border_1px{
+                  border-bottom: 1px solid #000;
+                }
+                @media only screen and (-webkit-min-device-pixel-ratio:2){
+                    .border_1px{
+                        background: url(../img/1pxline.png) repeat-x left bottom;
+                        background-size: 100% 1px;
+                    }
+                }
+
+
+    3. 伪类 + transform
+        基于media查询判断不同的设备像素比对线条进行缩放「这种方式可以满足各种场景，如果需要满足圆角，只需要给伪类也加上border-radius」
+    
+            .border_1px:before{
+              content: '';
+              position: absolute;
+              top: 0;
+              height: 1px;
+              width: 100%;
+              background-color: #000;
+              transform-origin: 50% 0%;
+            }
+            @media only screen and (-webkit-min-device-pixel-ratio:2){
+                .border_1px:before{
+                    transform: scaleY(0.5);
+                }
+            }
+            @media only screen and (-webkit-min-device-pixel-ratio:3){
+                .border_1px:before{
+                    transform: scaleY(0.33);
+                }
+            }
+
+      4. background-image：
+        和border-image类似，准备一张符合条件的边框背景图，模拟在背景上
+    
+              .border_1px{
+                  border-bottom: 1px solid #000;
+                }
+                @media only screen and (-webkit-min-device-pixel-ratio:2){
+                    .border_1px{
+                        background: url(../img/1pxline.png) repeat-x left bottom;
+                        background-size: 100% 1px;
+                    }
+                }
+
+
+六、移动端适配方案 [转换的都不一定能完全整除，会有像素差出现]
+
+   尽管可以使用设备独立像素来保证各个设备在不同手机上显示的效果类似，但这并不能保证它们显示完全一致，需要一种方案来让设计稿得到更完美的适配。 
+     
+     6.1 flexible 方案 [rem 布局]
+     
+         核心思想：ez，rem单位都是相对于根元素html的font-size来决定大小的
+           当页面的size发生变化时，只需要改变font-size的值，那么以rem为固定单位的元素的大小也会发生响应的变化
+           
+              
+         插件：PostCSS 的 px2rem（帮助我们完成转换） -- 在 css 中用 px 表示
+         原理很简单：预处理以px为单位的css文件
+         
+                   npm install postcss-loader
+
+                   module: {..loader},
+                   postcss: function() { /*配置webpack plugin*/
+                        return [px2rem({remUnit: 75})];
+                      }
+         
+          核心代码非常简单：
+            <html> 的 font-size 设置为页面 clientWidth(布局视口)的1/10
+            
+                    function setRemUnit () {
+                        var rem = docEl.clientWidth / 10/*flexible 模拟 vh、vm*/
+                        docEl.style.fontSize = rem + 'px'/*同一页面布局*/
+                    }
+                    setRemUnit(); /*后面使用的rem都是按照页面比例来计算*/
+                    
+                    window.addEventListener('resize', setRemUnit)window.addEventListener('pageshow', function (e) {
+                        if (e.persisted) {
+                          setRemUnit() /*触发了window的resize和pageShow事件之后自动调整html的fontSize大小*/
+                        }
+                    })
+           
+
+6.2 vh、vw [css3 中的新单位]
+
+    等分视觉高度为 100 份「flexible方案就是模仿这种方案，因为早些时候vw还没有得到很好的兼容。」
+
+    (1) 
+    
+      vw (Viewport's width)：1vw等于视觉视口宽的1%
+      vh (Viewport's height) :1vh 为视觉视口高的1%
+      vmax「vmin」 :  vw 和 vh 中的较大「小」值
+      
+      栗子：视觉视口为375px，那么1vw = 3.75px，这时UI给定一个元素的宽为75px（设备独立像素），我们只需要将它设置为75 / 3.75 = 20vw。
+      
+    插件：PostCSS的 postcss-px-to-viewport
+    
+    (2) 缺点
+      
+        当容器使用vw，margin采用px时，很容易造成整体宽度超过100vw，从而影响布局效果。
+           当然我们也是可以避免的，例如使用padding代替margin，结合calc()函数使用等等...
+
+    
+
+
+
+
+

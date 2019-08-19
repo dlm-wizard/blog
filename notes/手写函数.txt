@@ -1,0 +1,550 @@
+reduce 实现 map()、filter()
+
+  1. map() --- map(1, 2, 3) 与 reduce(2, 3, 4) 参数是一样的
+     
+     (1) this 的调用
+     (2) API 的掌握...[ 之前想通过 idx 判等筛选return 单个元素 -- too naive ]
+  
+     核心：reduce 返回 每个元素 cb() 后的数组
+     
+         Array.prototype._map = function (cb) {
+          if(typeof cb === 'function') {
+            return this.reduce((acc,item,index,arr) => {
+              return acc.push(cb(item, index, arr))
+            }, [])/*initialVal: []*/
+          } 
+     
+  2. filter() 
+  
+     核心：reduce 返回 cb() 筛选后的数组
+     
+        Array.prototype._filter = function (cb) {
+          if(typeof cb === 'function') {
+            return this.reduce((acc, item, index, arr) => {
+              return cb(item, index, arr) ? acc.push(item) : acc
+            }, [])
+          }
+
+generator 函数自动执行
+
+  1. 通过 yield 表达式的值判断是回调函数还是 promise
+  
+     核心：如何将 g.next() 放入异步回调中自动执行? [递归]
+        
+	a. promise
+	     next.value.then(function () { next() })
+	 
+	b. generator
+	     next.value(next())
+	 
+     
+	     第一版：如何实现自动执行？ [如果用 then(onFulfilled) 封装 next() 函数，更清晰的代码逻辑 ]
+	     
+		function run(gen) {
+		    var gen = gen();
+		    
+		    function next(data) {
+			var result = gen.next(data);/*data: 异步的结果*/
+			if (result.done) return;
+
+			if (isPromise(result.value)) {
+			    return result.value.then(function(data) {
+				next(data);
+			    });
+			} else {
+			    return result.value(next)
+			}
+		    }
+		    next()
+		}
+		function isPromise(obj) {
+		    return 'function' == typeof obj.then;
+		}
+		
+	    
+	    第二版：优化 在 next() 实现自动执行的基础上
+	     	    1. 先封装为 promise 对象
+		    2. 实现 onFulfilled 封装 next() 捕获异常，通过 toPromise 实现参数一致性
+	   	 
+	    
+		function run(gen) {
+		  return new Promise(function (resolve, reject) {
+		    gen = gen();
+
+		    onFulfilled();
+
+		    function onFulfilled(res) {
+		      var ret;
+		      try {
+			ret = gen.next(res);
+		      } catch (e) {
+			return reject(e);
+		      }
+		      next(ret);
+		    }
+		    // onRejected 同上
+
+		    function next(ret) {
+		      if (!ret.done) {
+			return resolve(ret.value);
+		      }
+		      var value = toPromise(ret.value);/*如果是回调函数则包装为promise处理*/
+		      
+		      if (value && isPromise(value)) {/*yield 是回调函数或 promise 时才能自动执行*/
+			return value.then(onFulfilled, onRejected);
+		      }
+		      return onRejected();
+		    }
+		  })
+		}
+
+		function isPromise(obj) {
+		  return 'function' == typeof obj.then;
+		}
+
+		function toPromise(obj) {
+		  if (isPromise(obj)) return obj;
+		  if ('function' == typeof obj) return thunkToPromise(obj);
+		  return obj;
+		}
+		function thunkToPromise(fn) { /*promise 包装回调*/
+		  return new Promise(function (resolve, reject) {
+		    fn(function (err, res) {
+		      if (err) return reject(err);
+		      resolve(res);
+		    });
+		  });
+		}
+
+		module.exports = run;
+     
+  2. filter() 
+       
+       1. 获取 generator 返回值
+       2. 我们如何捕获错误（fetch 不存在的接口）
+  
+     核心：reduce 返回 cb() 筛选后的数组
+     
+        Array.prototype._filter = function (cb) {
+          if(typeof cb === 'function') {
+            return this.reduce((acc, item, index, arr) => {
+              return cb(item, index, arr) ? acc.push(item) : acc
+            }, [])
+          }
+
+
+
+一：实现一个 sleep 函数 [手写 promise、async、generate ]
+
+[sleep的应用](https://juejin.im/entry/58dcb0cab123db006038d847)
+
+1. es5 
+   死循环，synchronous ajax，alert/prompt/confirm，都可以把主线程阻塞住，但你界面也卡住了
+   如果你想要的只是暂停一段代码执行，那还是有可能在不阻塞线程的情况下实现的，方法就是利用 generator yield 的可暂停和恢复的特性
+
+核心代码：
+        var start=Date.now(),
+            expire=start+ms;
+        while(Date.now() < expire);/*容易死循坏*/   
+
+
+2. promise
+   延迟 promise 状态的改变 --- 对 resolve 设置延时函数
+	
+	promise 时 resolve 作为定时器回调执行，然后继续执行，微任务设置了 resolve异步 执行的执行函数
+	其实有一个时间段，Js 主线程是处于空闲状态的
+
+        function sleep(ms) {
+          var delay = new Promise((resolve) => {
+            console.log('立即');
+            setTimeout(resolve, ms)
+          });
+          return delay
+        }
+        sleep(500).then(function () {
+          console.log('延迟')
+        })
+        // => 立即
+        // 500ms后 => 延迟
+
+
+3. async
+
+        function sleep(ms) {
+          return new Promise((resolve) => setTimeout(resolve, ms));
+        }
+        async function sleepTest() {
+          var delay = await sleep(1000);
+          console.log('延迟')
+          return delay
+        }
+        sleepTest();
+        // 1000ms后 => 延迟
+
+
+4. generator
+
+        function* sleep(ms) {
+          yield new Promise(function (resolve, reject) {
+            console.log('立即');
+            setTimeout(resolve, ms);
+          })
+        }
+        sleep(500).next().value.then(function () { 
+          console.log('延迟') 
+        })
+        // => 立即
+        // 500ms后 => 延迟
+        
+        
+二：模拟实现一个 Symbol 类型
+
+    Symbol：新的原始数据类型 [表示独一无二的值] -- primitive 类型，不是对象，不可以用 new ()
+    
+    1. Symbol() | Symbol(str) -- 对 Symbol 值的描述
+         相同参数 Symbol(str) 返回值也不相等
+         
+    2. 不能与其他类型的值运算
+    
+    3. 可以作为对象属性 [保证不出现同名属性]，且不会被 for..in、object.keys()、Object.getOwnPropertyNames() 遍历
+    
+    4. Symbol.for：返回同一 Symbol 值
+       Symbol.keyFor：
+    
+
+三：ajax 与 fetch [一定记得考虑兼容性]
+
+   原理：简单一句话，AJAX 就是用 JS 向服务端发起一个请求，并获取服务器返回的内容。这跟以前的技术最大的不同点在于「页面没有刷新」，仅此而已
+   减轻了服务器的负担，节省带宽（byte率）
+   
+     相当于在浏览器和服务器之间增加一个中间层（ajax引擎），使用户操作和服务器响应异步化
+   
+   1. ajax 被发明之前, 浏览器解析 url 发起请求 
+
+        (1) 页面刷新 (url、 <a>)
+        (2) 只能请求特定文件 (<img> 、 <link> 、<script>)
+
+   2. XMLHttpRequest 对象(引擎扩展对象)
+   
+      属性：
+        xhrReq.readyState
+             UNSENT：0
+             OPENED：1 [已建立连接]
+             HEADERS_RECEIVED：2
+             LOADING：3
+             DONE：4
+        
+        xhrReq.status：状态码
+        
+        xhrReq.response：responseText [字符串格式] OR responseXML [XML格式]
+   
+   1) 创建一个对象，并监听请求成功后状态变化
+   
+      (1) open(method, url, async) -- 初始化请求
+      (2) setRequestHeader(header, value) -- 设置http请求头 --- 可以多次设置
+      (3) send() -- 发送请求
+      		
+                // 简单模拟 Jquery $.ajax()
+                function ajax(obj) { 
+                  obj.type = obj.type || "get"
+                  obj.async = obj.async || true
+                  obj.data = obj.data || ''
+
+                  if (window.XMLHttpRequest) {
+                    let xhrReq = new XMLHttpRequest();
+                  } else {
+                    let xhrReq = new ActiveXObject; /*兼容IE5、6*/
+                  }
+                  var body = ''
+                  if (obj.type == "post") {
+                    body = JSON.stringify(obj.data);
+                  } else {
+                    var url = obj.url + "?" + toSearchData(obj.data)/*test.php?xx=xx&aa=xx*/
+                  }
+                  xhrReq.open(method, url, async);/*async：Boolean*/
+                  xhrReq.setRequestHeader(header, value);
+                  xhrReq.send(body);/*post请求数据*/
+
+                  xhrReq.onreadystatechange = () => {
+                    if (xhrReq.readyState == 4 && xhrReq.status == 200) {
+                      if (obj.success) {
+                        obj.success(xhrReq.responseText)
+                      }
+                      /*error同上*/
+                    }
+                  }
+                }
+            
+    缺点：XMLHttpRequest 设计粗糙，没有关注分离的原则  => 使用 fetch
+          配置和调用的方式也比较混乱
+          基于事件的异步模型不如 Promise，generator/yield，async/await 友好
+          
+       现代的回调解决 promise：
+       
+           fetch(url).then(response => response.json())
+          .then(data => )
+          .catch(err => )
+
+
+四：fetch
+   原理：Fetch API 是基于 Promise 设计
+   原生支持率并不高，但引入 polyfill 后可以完美支持 IE8+
+   
+   new Headers、Headers、Response() [window 扩展对象]
+  
+   
+   1. Fetch 常见坑 [底层 API, 封装程度并不高]
+
+        (1) 默认是不带 cookie -- fetch(url, {credentials: 'include'})
+        (2) 返回错误的状态码 status 并不会 reject，只有网络错误导致请求不能完成时，fetch 才会被 reject。
+
+   2. fetch(url, header)
+      
+      简单的封装一个 http 工具库：
+        * 拼接 search 参数
+	* 配置请求参数 method（大写）、headers、mode、cache、credentials [fetch 设置 cookie]
+	* fetch 兼容 XMLHttpRequest [兼容 ActiveXObject]
+   
+            	import {baseUrl} from './env'
+
+		// ES6 参数默认值
+		export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
+		  type = type.toUpperCase()
+		  url = baseUrl + url
+
+		  // data 里存储了get方式的查询数据
+		  if (type === 'GET') {
+		    let datastr = ''
+		    Object.keys(data).forEach(key => {
+		      datastr = `${key}=${data[key]}&`
+		    })
+		  }
+
+		  if (datastr !== '') {
+		    datastr = datastr.substr(0, datastr.lastIndexOf('&')) /*删除剩余'&'*/
+		    url = `${url}?${datastr}`
+		  }
+
+		  if (window.fetch && method === 'fetch') {
+		    let requestConfig = {
+		      credentials: 'include', /*不论是不是跨域的请求,总是发送请求资源域在本地的 cookies*/
+		      method: type,
+		      headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		      },
+		      mode: 'cors', /*允许跨域请求*/
+		      cache: 'force-cache'
+		    }
+
+		    if (type === 'POST') {
+		      requestConfig[body] = JSON.stringify(data)
+		    }
+
+		    try {
+		      const response = await fetch(url, requestConfig)
+		      const responseJson = await response.json()
+		      return responseJson
+		    } catch (error) {
+		      throw new Error(error)
+		    }
+
+		  } else {
+		    return new Promise((resolve, reject) => {
+		      let xhreq
+		      if (window.XMLHttpRequest) {
+			xhreq = new XMLHttpRequest
+		      } else {
+			xhreq = new ActiveXObject()/*IE*/
+		      }
+		      /*XMLHttpRequest.withCredentials*/
+
+		      let body = ''
+		      if (type === 'POST') {
+			sendData = JSON.stringify(data)
+		      }
+
+		      xhreq.open(type, url, true)
+		      xhreq.setRequestHeader("Content-type", "application/json")
+		      xhreq.send(body)
+
+		      xhreq.onreadystatechange = () => {
+			if (xhreq.readyState == 4) [
+			  if (xhreq.status === 200) {
+			    let response = xhreq.response
+
+			    if (typeof response !== 'object') {
+			      response = JSON.parse(response)
+			    }
+			    resolve(response)
+			  } else {
+			    reject (xhreq)
+			  }
+			]
+		      }
+		    })
+		  }
+		}
+   
+
+
+五、图片的懒加载和预加载
+
+	1. 预加载：提前加载图片，当用户需要查看可以直接从本地缓存中渲染
+    
+    原理：new Image()，onload() 回调预加载完成事件
+    
+	  why 预加载：
+      
+          I. 在网页加载之前，对一些主要内容进行加载，以提供用户更好的体验，减少等待时间。
+		  II. 如果一个页面的内容过于庞大，会出现留白直到资源加载完毕
+          
+		解决页面留白的方案：1.预加载  2.使用svg站位图片，将一些结构快速搭建起来，等待请求的数据来了之后，替换当前的占位符
+        
+	  实现预加载的方法：
+      
+	 		1. 隐藏在 css background 中 [加载到屏幕外]
+                 会和文档其他资源一起加载，增加页面加载的整体时间
+            
+                 function preloader() {
+                    document.getElementById("preload-01").style.background = "url() no-repeat -9999px -9999px";
+                    document.getElementById("preload-02").style.background = "url() no-repeat -9999px -9999px";
+                }
+                function addLoadEvent(func) {
+                  window.onload = function() {
+                      if (oldonload) {
+                          oldonload();
+                      }
+                      func();/*解决增加页面加载整体时间*/
+                  }
+                }
+                addLoadEvent(preloader);
+                
+			2. Js 设置 Image() 对象的 src 属性
+            
+                 let len = imgs.length; 
+                    let count = 0;
+                    preLoad();
+                    /**
+                     * 遍历imgs数组，有序将所有图片加载出来
+                     * 不用顺序的话，直接 for() 遍历加载
+                     */
+                    function preLoad() { 
+                        var img = new Image();
+                        img.src = imgs[count];
+
+                        img.addEventListener(preLoad, error, function () {/*顺序加载图片*/
+                          console.log(count);
+                          if (count >= len) {
+                              console.log('加载完毕');
+                              $('.container').addClass('active');
+                          } else {
+                              preLoad(); // 继续加载下一张
+                          }
+                          count++;
+                        }, false)
+                    }
+
+
+
+	2. 懒加载（lazyload）：长网页中延迟加载图像 客户端优化， [用户滚动到它们之前，可视区域外的图像不会加载]
+     
+       why lazyload:
+       
+		    I. 提升用户体验 [减少请求数和延迟请求数]
+		    II. 减少无效资源的加载
+		    III. 防止并发加载的资源过多会阻塞js的加载，影响网站的正常使用
+		
+		
+	  原理：
+        1. 首先图片 src 都设置为 ""，真实路经设置在 img.original 属性中 [实际可能有多个路径：item.dataset.original]
+        2. 监听 scroll 事件，回调判断是否进入可视区域 [取到所有 lazyload 图片元素集遍历判断]
+           在可视区域 -> item.src = item.original [实现延迟加载]
+		
+		    var viewHeight = document.documentElement.clientHeight/*获取可视区高度*/
+            function lazyload() {
+              var eles = document.querySelectorAll（'img[data-original][lazyload]'）
+              Array.prototype.forEach.call(eles, function (item, index) {
+                var rect
+                if (item.original === "")
+                  return
+                rect = item.getBoundingClientRect()/*元素相对于 viewport 距离[不包括 margin]*/
+                if (rect.bottom >= 0 && rect.top < viewHeight) {/*进入可视区域*/
+                  (function () {
+                    var img = new Image()
+                    img.src = item.original
+                    img.onload = function () {/*只加载可以访问的图片*/
+                      item.src = img.src
+                    }
+                    item.removeAttribute（"data-original"）/*移除属性，下次不再遍历??*/
+                    item.removeAttribute（"lazyload"）
+                  }()
+                }
+              })
+            }
+            lazyload()/*未滚动时，初始化首页图片*/
+            document.addEventListener（"scroll"，lazyload)
+
+
+
+六、依赖处理，获取需要实际依赖的属性
+
+	1. 递归
+	   简单的获取对象属性，
+    
+    原理：new Image()，onload() 回调预加载完成事件
+    
+	  why 预加载：
+      
+          I. 在网页加载之前，对一些主要内容进行加载，以提供用户更好的体验，减少等待时间。
+		  II. 如果一个页面的内容过于庞大，会出现留白直到资源加载完毕
+          
+		解决页面留白的方案：1.预加载  2.使用svg站位图片，将一些结构快速搭建起来，等待请求的数据来了之后，替换当前的占位符
+        
+	  实现预加载的方法：
+      
+	  1. 隐藏在 css background 中 [加载到屏幕外]
+                 会和文档其他资源一起加载，增加页面加载的整体时间
+            
+                 function preloader() {
+                    document.getElementById("preload-01").style.background = "url() no-repeat -9999px -9999px";
+                    document.getElementById("preload-02").style.background = "url() no-repeat -9999px -9999px";
+                }
+                function addLoadEvent(func) {
+                  window.onload = function() {
+                      if (oldonload) {
+                          oldonload();
+                      }
+                      func();/*解决增加页面加载整体时间*/
+                  }
+                }
+                addLoadEvent(preloader);
+                
+	  2. Js 设置 Image() 对象的 src 属性
+            
+                 let len = imgs.length; 
+                    let count = 0;
+                    preLoad();
+                    /**
+                     * 遍历imgs数组，有序将所有图片加载出来
+                     * 不用顺序的话，直接 for() 遍历加载
+                     */
+                    function preLoad() { 
+                        var img = new Image();
+                        img.src = imgs[count];
+
+                        img.addEventListener(preLoad, error, function () {/*顺序加载图片*/
+                          console.log(count);
+                          if (count >= len) {
+                              console.log('加载完毕');
+                              $('.container').addClass('active');
+                          } else {
+                              preLoad(); // 继续加载下一张
+                          }
+                          count++;
+                        }, false)
+                    }
+
+    
+    
+    

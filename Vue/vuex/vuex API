@@ -1,0 +1,86 @@
+
+## 语法糖
+
+### 
+
+> 当一个组件需要获取多个状态时候，将这些状态都声明为计算属性会有些重复和冗余。同样这些问题也在存于 getter、mutation 和 action
+
+Vuex 提供了一系列 mapXXX 辅助函数帮助我们实现在组件中可以很方便的注入 store 的属性和方法
+
+#### 1.  mapState
+
+> mapState 最终是要构造一个对象，每个对象的元素都是一个方法，因为这个对象是要扩展到组件的 computed 计算属性中的
+
+```
+import { mapState } from 'vuex'
+
+export default {
+  computed: {
+    count () {
+      return this.$store.state.count
+    }
+  }
+  computed: mapState([ /*使用辅助函数更简洁的生成计算属性*/
+    'count' /*映射 this.count 为 store.state.count*/
+  ])
+}
+```
+
+```
+/*
+  namespace：命名空间「可不传」
+  states：具体的对象
+*/
+export const mapState = normalizeNamespace((namespace, states) => {
+  const res = {}
+  /*将normalizeMap方法返回对象拼接为computed计算属性*/
+  normalizeMap(states).forEach(({ key, val }) => {
+    res[key] = function mappedState () {
+      let state = this.$store.state
+      let getters = this.$store.getters
+      if (namespace) {
+        const module = getModuleByNamespace(this.$store, 'mapState', namespace)
+        if (!module) {
+          return
+        }
+        state = module.context.state
+        getters = module.context.getters
+      }
+      /*拼接核心代码*/
+      return typeof val === 'function'
+        ? val.call(this, state, getters)
+        : state[val]
+    }
+    // mark vuex getter for devtools
+    res[key].vuex = true
+  })
+  return res
+})
+
+function normalizeNamespace (fn) {
+  return (namespace, map) => {
+    if (typeof namespace !== 'string') {
+      map = namespace
+      namespace = ''
+    } else if (namespace.charAt(namespace.length - 1) !== '/') {
+      namespace += '/'
+    }
+    return fn(namespace, map)
+  }
+}
+
+/*执行 normalizeMap 方法，把这个 states 变成一个数组，数组的每个元素都是 {key, val} 的形式*/
+function normalizeMap (map) {
+  return Array.isArray(map)
+    ? map.map(key => ({ key, val: key }))
+    : Object.keys(map).map(key => ({ key, val: map[key] }))
+}
+```
+
+
+
+
+
+
+
+

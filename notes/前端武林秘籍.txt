@@ -7014,6 +7014,286 @@ function createIndex(dir, indexFinder, sortedIndex) {
 
 
 
+## 面经
+						node面试(难)
+
+一、koa中间件执行机制
+	1.使用过的koa2中间件
+	2.koa-body原理
+		(1)为什么要用koa(express和koa对比)
+	3.介绍自己写过的中间件(有没有设计cluster)
+
+二、
+     	1、koa中response.send、response.rounded、response.json发生了什么事，浏览器为什么能识别到它是一个json结构或是html
+     	2、koa-bodyparser怎么来解析request
+	 
+三、node
+     	1、进程和线程的区别(一个node实例就是一个进程，node是单线程，通过事件循环来实现异步)
+		(1)nodejs是单线程还是多线程的，为什么能去开很多异步请求去访问其他接口		
+     	2、node文件查找优先级
+	3、npm2和npm3+有什么区别
+	4、express框架的设计思想(难)
+		(1)express里面登录的session服务怎么样实现分布式服务(难)
+		(2)express中间件如何实现
+		(3)express和koa2的区别
+		(4)express动态路由匹配，源码设计
+	5、node错误处理(难)
+	6、用node干了什么，mvc+模板引擎，多页面应用
+
+    一、koa中间件执行机制
+	1.使用过的koa2中间件
+	2.koa-body原理
+	3.介绍自己写过的中间件(有没有设计cluster)
+	
+二、node进程管理工具pm2
+     	1、介绍pm2
+     	2、master挂了的话pm2怎么处理
+	 
+三、node进程管理工具pm2
+     	1、介绍pm2
+     	2、master挂了的话pm2怎么处理
+	 	(1)前端监控，pm2，如果我服务器挂了，如何快速发现并且定位错误
+
+四、node进程管理工具pm2
+     	1、介绍pm2
+     	2、master挂了的话pm2怎么处理
+	 	(1)前端监控，pm2，如果我服务器挂了，如何快速发现并且定位错误
+	3、不用pm2怎么做进程管理
+	 
+	 
+	 					HTML+CSS面试	
+
+一、HTML
+		(2)请把<body><p>第1行</p><p>第2行</p>...</body>（body之间有100个p元素）插入body里面，注意：需要考虑到性能问题 => https://juejin.im/post/590f4eadac502e006cf718c3
+
+
+
+	 
+						
+
+	 
+	 
+	 	 				vue面试
+jQuery和vue对比,jquery和vue的本质区别
+
+一、webpack(难)
+	1.webpack热更新原理
+	2.使用过webpack里面哪些plugin和loader(webpack整个生命周期，loader和plugin有什么区别)
+		(1)Webpack中loader的作用
+	3.webpack里面的插件是怎么实现的
+		(1)webpack有个插件可以解决css兼容性问题你知道吗（postcss-loader）
+		(2)webpack的插件大致流程
+	4.抽取公共文件是怎么配置的
+	5.(1)import { Button } from 'antd'，打包的时候只打包button，分模块加载，是怎么做到的
+ 	  (2)使用import时，webpack对node_modules里的依赖会做什么
+	6.一般怎么组织CSS（Webpack）
+	7.webpack如何配sass，需要配哪些loader
+	8.配css需要哪些loader
+	9.如何配置把js、css、html单独打包成一个文件
+	10.webpack工程构建工具怎么样用
+		(1)怎么配webpack
+	11.webpack的了解，整个流程，插件开发，loader开发
+	12.vue如何做多页面应用，知道webpack能配这个吗
+	13.webpack的spa，为什么选择spa，前端路由原理
+
+二、vue基础
+     	1、介绍虚拟DOM(难)
+	 	(1)虚拟DOM主要做了什么、本身是什么（JS对象）
+		(2)vue响应式原理、计算属性、依赖收集、监听数组(***重要***)
+			1)渲染watcher到虚拟dom
+		(3)为什么虚拟DOM比真实DOM性能好
+			1)为什么虚拟dom就快了呢(转化为js数据结构，最小化dom操作，最后render插入)
+     	2、vue双向绑定原理
+	 (observer,watcher,complier,MV->（文档片段节点劫持）->VM(defineproperty的set和get)->MV(观察者模式，第二阶段导致变化，发布信息publish)) 
+	 	(1)介绍defineProperty方法，什么时候需要用到
+		(2)vue源码，双向绑定，render、component、mount原理和优先级
+			1)怎么实现数据驱动，怎么实现双向绑定，用v-bind举例
+	3、怎样实现数组绑定
+	4、如何去除url中的#号
+	5、JSX可以在vue里使用吗？(react相关)
+	6、vue的生命周期
+	7、vue 整个流程，双绑，complier，htmlparser，render函数
+	8、vue1和vue2的区别,vue3的了解
+	9、使用Vue进行移动端开发时如何调用原生API?
+	10、手写vue mixins方法
+	11、抽取过哪些vue组件
+	 
+三、eventBus vuex
+     	1、Emit事件怎么发，需要引入什么
+	 	(1)@emit的实现原理
+    	2、vuex的状态管理的原理是什么
+	 	(1)说一下vuex（复杂关系的组件，统一的状态管理），再说一下单向数据流（类比react的state），那我子父组件通信呢（事件总线）
+			1)设计一个单点登录系统，类似阿里系那种
+		(2)为什么需要vuex，他是做什么的
+	3、vuex数据流的理解（把流程图背一遍，然后用原生vue+storage和vuex做比较）
+	 
+四、Vue的组件
+     	1、父子组件、子孙组件、兄弟组件、无关系组件传值
+     	2、vue-router怎么实现的
+	 	(1)VueRouter的原理？
+		(2)前端路由Hash模式和History模式的区别？
+
+五、Vue的SPA
+     	1、什么是单页项目
+     	2、介绍单页面应用和多页面应用
+	
+vue入门demo：实现百度、360】搜狗的搜索框 => 	https://github.com/lavyun/vue-demo-search
+vue：实现一个联想搜索组件
+	 
+	 
+	 					http面试
+登录原理
+
+一、http状态码
+	1.介绍下HTTP状态码
+		(1)403、301、302、304是什么
+	2.http报文的请求会有几个部分
+	3.从输入URL到页面加载全过程 => https://segmentfault.com/a/1190000006879700
+		(1)JS如何计算浏览器的渲染时间的
+		(2)tcp3次握手
+		(3)js、css阻塞页面那些问题，异步加载js（async、defer、动态创建）
+
+二、
+	1.常见http请求头
+		(1)缓存相关的HTTP请求头
+	2.http报文的请求会有几个部分
+	3.从输入URL到页面加载全过程
+		(1)tcp3次握手、四次分手
+		(2)DOMContentLoaded与load的区别等事件触发顺序 =>   https://zhuanlan.zhihu.com/p/25876048/https://www.cnblogs.com/caizhenbo/p/6679478.html
+
+三、get与post
+    	1、搜索请求中文如何请求
+     	2、master挂了的话pm2怎么处理
+	 
+四、http1.0 1.1 2.0
+     	1、介绍http2.0
+     	2、http1.1时如何复用tcp连接
+	 
+五、https
+     	1、介绍https
+     	2、https怎么建立安全通道
+	3、http和https的区别
+	4、https的加密过程
+	 	(1)介绍SSL和TLS
+	 
+六、web缓存
+     	1、http缓存控制
+     	2、http1.1时如何复用tcp连接
+     	3、浏览器缓存一套（强制缓存、协商缓存、应用缓存）
+	 	(1)浏览器缓存字段的优先级
+	 
+七、常见的web安全及防护原理
+     	1、xss、csrf，防御措施
+
+八、CDN内容分发网络
+     	1、CDN的作用
+     	2、CDN的原理
+	 
+	 
+	 	 				服务器存储与传输方式	
+
+一、前端持久化方式
+	1.cookie放哪里，cookie能做的事情和存在的价值(为了解决什么问题)
+	2.cookie和token都存放在header里面，为什么只劫持前者
+	3.cookie和session有哪些方面的区别
+	
+
+二、cookie，sessionStorage，localStorage是存放在客户端，session对象数据是存放在服务器上
+     	1、localStorage和cookie有什么区别
+     	2、master挂了的话pm2怎么处理
+	3、介绍localstorage的API
+
+三、前端鉴权
+     	1、项目里的前端鉴权是怎么实现的(重要)
+	 
+	 
+	 					设计模式	
+
+一、观察者模式与发布-订阅者
+	1.介绍观察者模式
+		(1)观察者模式里面使用的数据结构(不具备顺序 ，是一个list)
+	2.介绍中介者模式
+	3.观察者和订阅-发布的区别，各自用在哪里
+		(1)Node.js EventEmitter发布订阅模式实现(难、重要)
+		(2)实现一个发布订阅系统，包括on、emit、off等(难)
+	
+
+二、单例、工厂、观察者项目中实际场景
+	 
+
+
+
+						操作系统与linux基础	
+
+一、进程
+	1.操作系统进程和线程的区别
+	2.线程的哪些资源共享，哪些资源不共享
+	3.多线程、死锁、竞争、安全
+	
+
+二、linux
+     	1、Linux命令用的多吗，怎么样进行进程间通信
+    	2、kill指令了解过吗
+
+	 
+	 
+	 					数据结构	
+
+一、顺序表、链表
+	1.如何判断链表是否有环
+	2.用JS模拟一个双向链表
+	3.介绍自己写过的中间件(有没有设计cluster)
+
+二、树
+     	1、介绍排序二叉树(二叉搜索树)的特点
+     	2、反转二叉树以及时间复杂度
+	3、二叉树层序遍历
+	4、b树、b+树、红黑树
+	5、给一个节点树，ul里面可能有ul和li，但li就不会有东西了，判断数的高度
+		（我用的是bfs，不过出了一点问题，面试官叫我用递归试一下。递归解法类似剑指offer的二叉树深度，只是for in 循环整个ul取最大值）
+
+三、基础算法
+     	1、排序所有算法都要掌握到滚瓜熟练(**尤其是快排、时间复杂度、优化**)
+	2、介绍下DFS深度优先
+	3、手写数组去重函数(重要)
+	4、手写数组扁平化函数(重要)
+
+四、手写算法		=>			https://segmentfault.com/a/1190000011758238
+     	1、sum(2, 3)实现sum(2)(3)的效果
+     	2、取数组的最大值(ES5、ES6)
+	3、写个函数判断是不是回文序列
+	4、怎么判断一个数是不是2的n次方
+	5、电脑里有很多大小不一样的照片，我现在要复制到U盘上，但是U盘容量固定，让你写一个程序，挑选一组照片，让U盘的剩余空间最小(尾递归问题)
+	6、给一个无序的数组，让我分割成m组，这个m组里和最大的一组是所有可能的分割情况最小的(二分答案法)
+	7、如何在上亿规模的数据中找到最大的一个数(堆排序？)
+	8、文章里面出现频率最高的
+	9、正则匹配属于qq.com的
+	10、大数相加(难)
+	11、从给定的无序、不重复的数组data中，取出n个数，使其相加和为sum。并给出算法的时间/空间复杂度 。(不需要找到所有的解，找到一个解即可)
+	12、思考(怎么判断一个点是否在圆形内、正方形内)
+
+
+Q:
+1、介绍service worker?
+2、栈和堆的区别
+	(1)栈和堆具体怎么存储
+3、如何对相对路径引用进行优化
+4、websocket握手过程
+5、如何对相对路径引用进行优化
+6、遍历数组处理用for循环还有什么方法吗
+7、了解前后端交互吗（restful的api）那怎么传数据（跨域、不跨域情况）跨域怎么跨（cors、jsonp）
+8、PWA
+9、线上日志是如何处理的
+
+
+
+
+
+快手喜欢考智力题
+
+ 
+
+
 
 
 

@@ -34,15 +34,11 @@
     * [1. window窗口](#window-%E7%AA%97%E5%8F%A3)
     * [2. Element（元素大小）](#element%E5%85%83%E7%B4%A0%E5%A4%A7%E5%B0%8F)
     * [3. 鼠标和触摸事件](#%E9%BC%A0%E6%A0%87%E5%92%8C%E8%A7%A6%E6%91%B8%E4%BA%8B%E4%BB%B6)
-
-
-
-
-
-
-
-
-    
+* [前端事件流](#%E5%9B%9B%E5%89%8D%E7%AB%AF%E4%BA%8B%E4%BB%B6%E6%B5%81)
+    * [1. 事件处理程序](#1-%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F)
+    * [2. 事件对象](#2-%E4%BA%8B%E4%BB%B6%E5%AF%B9%E8%B1%A1)
+    * [3. 事件委托](#3-%E4%BA%8B%E4%BB%B6%E5%A7%94%E6%89%98)
+* [参考](#%E5%8F%82%E8%80%83)
 
 
 
@@ -226,7 +222,7 @@ docuemnt.styleSheets/element.sheet
 
 #### 4.1 用户界面事件 
 
-> 不一定与用户操作有关
+> 不一定与用户操作有关，window.event(事件对象)并包含任何信息
 
 ```bash
 # load 事件
@@ -817,6 +813,158 @@ getBoundingClientRect（返回一个 DOMRect 对象）
 3. 屏幕坐标
 event.screenX/Y
 ```
+
+#
+
+
+### 四：前端事件流
+
+Js 与 html 之间的交互是通过事件来实现的，元素绑定事件处理函数使用了观察者模式，形成了页面行为（js）与页面外观（html）之间的松散耦合。事件流描述了文档接受事件的顺序，在 click 按钮的同时，也点击了按钮的 container 容器，甚至也 click 了整个页面，但是 IE 与 Netscape 提出了完全相反的事件流概念。DOM 2 级规定事件流包括 3 个阶段 [事件捕获阶段、目标事件阶段、事件冒泡阶段]。
+
+```bash
+# 栗子（假如你点击了 div 元素）
+<body>
+    <div class="myDiv"></div>
+</body>
+
+
+# 事件冒泡
+ 事件开始由最具体的节点接收，然后逐级向上传播到较为不具体的节点
+ div -> body -> html -> document -> window
+
+# 事件捕获
+不太具体节点应该先接受到事件，而最具体的节点应该最后接受到事件
+window -> document -> html -> body -> div
+
+```
+
+### 1. 事件处理程序
+
+### 1.1 DOM0 事件处理程序 
+
+#### 内联事件处理程序
+
+```bash
+# 有权访问全局作用域中任何代码
+# <input type="button" onclick="alert('val');"></input>
+
+1. html 元素刚渲染完成还未加载js就触发了事件、耦合太重
+2. 作用域链各不同浏览器结果不同 [Element, Form 的 DOM 对象，document, window]
+```
+
+####  DOM0 级事件处理程序
+
+```js
+var btn = document.getElementById('btn')
+btn.onclick = function() {}//解决未加载触发问题
+btn = null //移除事件处理程序
+
+```
+
+
+### 1.2 DOM2 级事件处理程序 
+
+```bash
+1. 可以绑定多个事件处理程序
+2. removeEventListener  移除事件处理程序 [注：所有参数必须相同]	
+3. 要保证处理事件代码在大多数浏览器下可以一致运行，只需关注冒泡阶段 [IE]	
+		
+```
+
+```js
+btn.addEventListener(type, listener[, useCapture])
+btn.removeEventListener(type, listener[, useCapture])
+
+// IE
+attachEvent(type, handler)
+detachEvent(type, handler)
+```
+
+
+### 2. 事件对象
+
+无论 DOM 事件处理程序（DOM0 or DOM2），在触发事件时，会传入 event 对象	
+
+```bash
+# 属性
+1. target：目标（srcElement：IE）
+2. currentTarget：处理元素
+
+
+# 方法
+1. preventDefault()：阻止默认行为（returnValue: Boolean - IE）
+2. stopPropagation()：阻止事件在文档中捕获、冒泡（cancelBubble: Boolean - IE）
+4. stopImmediatePropagation()：阻止冒泡并阻止事件其他监听器的调用
+```
+
+```bash
+# IE 中事件对象作为 window 的一个属性存在, 不作为参数传入
+window.event
+
+# DOM0 级事件处理函数
+btn.onclick = function() {
+    var event = window.event
+}
+
+# DOM2 级事件处理函数
+attachEvent 传入的 event 仍作为 window 属性
+```
+
+### 3. 事件委托
+
+事件委托的雏形是由事件冒泡来形成的一个通知链，通过事件冒泡把所点击的元素代理在他的父元素上。1. 给很多重复的元素绑定点击事件是很浪费空间的的呐! 因为每个函数都是对象，2. 而且动态添加元素不会绑定点击事件。
+
+
+```js
+var addEvent = function() {
+    addHandler (el, type, handler) {
+    if (window.addEventListener) {
+        el.addEventListener(type, handler, false)
+    } 
+    else if (window.attachEvent) {
+        el.attachEvent(type, handler)
+    } else {
+        el[`on${type}`] = handler
+    }
+    },
+    removeHandler (el, type, handler) {
+    if (window.removeEventListener) {
+        el.removeEventListener(type, handler, false)
+    } 
+    else if (window.detachEvent) {
+        el.detachEvent(type, handler)
+    } else {
+        el[`on${type}`] = null
+    }
+    }
+}
+
+var myEvent = function() {
+    addEvent,
+    getEvent(event) {
+        return event ? event : window.event
+    }
+    getTarget(event) { // 区分 currentTarget
+        return event.target || event.srcElement
+    }
+    preventDefault(event) {
+        if (event.preventDefault) {
+            event.preventDefault()
+        } else {
+            event.returnValue = false
+        }
+    }
+    stopPropagation(event) {
+        if (event.stopPropagation) {
+            event.stopPropagation
+        } else {
+            event.cancelBubble = true
+        }
+    }
+}
+```
+
+
 
 #
 ## 参考

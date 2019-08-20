@@ -50,46 +50,58 @@
 
 > isFinite()、isNaN()、parseFloat()、parseInt()、编(解)码url
 
-BOM 的核心对象是 window，他表示浏览器的一个实例。在浏览器中，window 对象具有双重角色，他既是通过 JavaScript 访问浏览器窗口的一个接口，同时又扮演着 ECMA 中规定的 Global 对象，这意味着脚本在浏览器环境定义的任何一个对象、变量和函数，都是以 window 作为其 Global 对象，因此有权访问全局方法。
+```bash
+# 全局对象（Global）
+1. JavaScript 全局函数和全局属性的占位符。通过全局对象，可以访问其他所有预定义对象、函数和属性
+2. 全局上下文中变量对象就是全局对象呐
+全局对象是作用域链的头，顶层作用域声明所有变量都将成为全局对象属性
+```
 
-* name 
-    * 在一个 window 的生命周期内,所有 window 对象包括框架都共享一个 window.name，每个框架都有 window.name 读写的权限
-    * 只能保留字符串，储存容量可达几 MB
-* devicePixelRatio：设备像素比
+BOM 的核心对象是 window，他表示浏览器窗口的一个实例。每个 iframe 拥有自己的 window 对象。在浏览器中，window 对象具有双重角色，他既是通过 JavaScript 访问浏览器窗口的一个接口，同时又扮演着 ECMA 中规定的 Global 对象。
+
+[window.resize is not working in chrome and opera](https://stackoverflow.com/questions/5139323/window-resize-is-not-working-in-chrome-and-opera)
+
+
+```bash
+# 属性
+1. name: 保留字符串，储存容量可达几 MB
+在一个 window 的生命周期内,包括 iframe 都共享一个 window.name，并且都拥有读写的权限
+
+2. devicePixelRatio：设备像素比
+```
 
 ```bash
 # 浏览器窗口对象
 打开窗口：window.open(url, windowName, [windowFeatures]);
 
 # 窗口及框架关系
-1. window.frames # 用来保存页面中框架的 window 对象 [每个框架都拥有自己的 window 对象]
+1. window.frames # iframe-window 对象数组
 2. window.top [最外层窗口]
 3. window.parent [直接上层窗口]
 
-   
-# 调整浏览器窗口大小（单位：px） [可能被浏览器禁用]
-1. resizeTo
-2. resizeBy # 偏移量
-
 
 # 滚动文档到指定位置（单位：px）
-1. scrollTo(options)
-  options: {
+options: {
   top: y / left: x /*坐标*/
   behavior: auto('instant') | 'smooth'
 }
-2. scrollBy(offsetRight, offsetBottom) /*距离*/
+
+1. scrollTo(options)
+
+2. scrollBy(x, y) or (options);
+
 ```
 
 
 
 ### 二：常用 BOM 对象
 
-> demo: url: `<protocol>://<host>「<hostname>:<port>」/<pathname>?<query>#<hash>`
+> demo: url: `<protocol>://<host>「, <hostname>:<port>」/<pathname>?<query>#<hash>`
+
+> `<host>` = `<hostname>:<port>`
 
 ```bash
 # location 对象 [既是 window 对象的属性，也是 document 对象的属性]
-
 1. 通过 location.名称 获取 [protocol, host, hostname, port, pathname, hash]，除此之外还有：
 2. href
 3. search
@@ -97,8 +109,8 @@ BOM 的核心对象是 window，他表示浏览器的一个实例。在浏览器
 5. replace # 设置当前文档的 URL，并且在 history 对象的地址列表中移除当前 URL「应用：跳转移动版网页」
 6. reload # 刷新页面
 
-# history 对象
 
+# history 对象
 1. length [历史记录数量]
 2. go # 前进或后退指定的记录数 
 3. back
@@ -406,8 +418,10 @@ DocumentFragment | 11
 
 ```bash
 1. parentNode # 类型可能为 Element、Document or DocumentFragment
-2. firstChild / lastChild
-3. childNodes # 浏览器处理文本节点中空白符差异->el.children
+2. childNodes # 浏览器处理文本节点中空白符差异 
+ -> firstChild / lastChild
+3. el.children
+ -> firstElementChild / lastElementChild
 4. nextSibling/previousSibling
 5. ownerDocument
 ```

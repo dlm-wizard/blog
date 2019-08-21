@@ -19,6 +19,13 @@ link 与 @import的区别：
 		E + F：只选择一个后续相邻元素 （css3 E ~ F：选择 E 之后所有兄弟元素）
 		s1, s2, s2：多个选择器的组合
 		
+	   (2) 属性选择器
+		
+		E[att="val"]：属性值等于val的元素
+		E[att~="val"]：属性值（空格分隔）包含val [class="map isActive ..."]
+		E[att*="val"]：属性值中（整体）包含val字符串
+
+				
 	   (2) 常用伪元素：
 	   
 	   	::after ::before：设置元素在dom 树结构前后发生的内容，与 content 属性一起使用（插入的内容都是匿名的可替换元素）

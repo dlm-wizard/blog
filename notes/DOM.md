@@ -484,7 +484,10 @@ demo：
 #
 ### 2) Attr（属性结点）
 
-> Element 元素节点对象的属性，!重点（html 中布尔属性只要被设置，其值无论是什么都默认为"true"，取消该属性需要使用 removeAttribute）
+#### html 中布尔属性
+只要被设置，其值无论是什么都默认为"true"，取消该属性需要使用 removeAttribute
+
+> Element 元素节点对象的属性
 
 > demo 中的 lang、charset、id、class
 

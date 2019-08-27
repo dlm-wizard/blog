@@ -45,14 +45,13 @@ a 标签会完全刷新页面，SPA 中我们只需要 fetch 改变的数据而�
 ```
 
 ```bash
-# router-link to="{ 
-                     name: 'user', 
-                     params: { id: '1' }, 
-                     query: { age: 21 } 
-                  }"
+router-link to="{ 
+                   name: 'user', # 命名路由
+                   params: { id: '1' }, # 动态路由
+                   query: { age: 21 } # 查询参数
+                }"
                   
-# to 的值会被立即传递到 router.push()
-
+to 的值会被立即传递到 router.push()
 -> router.push({ name: 'user', params: { id: '1' }, query: { age: 21 } })
 ```
 

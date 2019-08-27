@@ -5,7 +5,7 @@
 
 我们已经可以通过组件来构建应用程序了，添加上 `Vue-router` 一的话，只需要将组件`components`映射到路由`route`，然后告诉 Vue-router 在哪里渲染他们。
 
-```
+```bash
 # 作用
 建立起路径和视图之间的映射关系 [router-link 的作用]
 
@@ -32,7 +32,7 @@
 
 #### router-link
 
-```
+```bash
 # 作用
 在具有路由功能应用中导航，默认渲染为 a 标签，点击该标签不会刷新页面（router-link 截取 click 事件），但是
 a 标签会完全刷新页面，SPA 中我们只需要 fetch 改变的数据而不是和普通网页一样 re-fetch 所有资源。
@@ -79,10 +79,10 @@ const router = new VueRouter({})
     name?: string; // 命名路由
     components?: { [name: string]: Component }; // 命名视图组件
     redirect?: string | Location | Function;
-    props?: // 组件属性
-     1. boolean: route.params;
-     2. Object: 静态属性
-     3. Function: 动态属性
+    props?: // 路由参数传递
+     1. boolean: 「props: {params: route.params}」
+     2. Object: 「props: 静态对象」
+     3. Function: 「props: 动态对象」
     alias?: string | Array<string>;
     children?: Array<RouteConfig>; // 嵌套路由
     beforeEnter?: (to: Route, from: Route, next: Function) => void;

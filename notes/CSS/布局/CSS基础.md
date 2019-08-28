@@ -304,9 +304,9 @@ box-sizing: border-box（IE 怪异盒模型） | content-box（w3c 标准盒模�
 设置负值 margin 的时候，元素会按照设置的方向移动相应的距离。
 
 2. 方向为 bottom 或者 right
-元素本身并不会移动，元素后面的其他元素会往该元素的方向移动相应的距离，并覆盖该元素
+元素后面的其他元素会往该元素的方向移动相应的距离，并覆盖该元素
 # 注：
-① 当 position：relative - 元素移动时，后边的元素会被该元素覆盖
+① 当 position：relative - 元素移动时，后边的元素会「被覆盖」
 ② 当 position：absolute - 脱离 noraml flow，所以不会对后边元素造成影响
 
 
@@ -362,9 +362,20 @@ margin = (包含块width-(左b+左p+width+右p+右b))/2。不能垂直居中的�
 在对应的 IFC 中，行内元素从容器的顶端开始，一个接一个水平排列。
 ```
 
-在 css 中可以通过 `float` 与 `position：absolute`两种方法让元素脱离 normal flow，但 `float`内容仍然存在与 normal flow 中。 如果元素不脱离  normal flow，元素盒子是不可能层叠在一起的。我们应该进一步理解z-index是如何工作的，尤其是层叠上下文的概念。
+```bash
+# 脱离 normal flow
+1. float
+2. position：absolute
 
-每个 html 元素都属于一个层叠上下文、制定层叠上下文中的每个定位元素都具有一个整数的层叠级别
+应用：
+# 块级元素的同行显示
+1.改变显示方式 2.改变 normal flow
+
+# 层叠上下文的概念
+如果元素不脱离  normal flow，元素盒子是不可能层叠在一起的，我们应该进一步理解 z-index 是如何工作的。
+我们应该进一步理解z-index是如何工作的
+```
+
 
 ```bash
 # BFC
@@ -518,6 +529,30 @@ play-state：running | paused
 # 结束后样式
 fill-mode：none（未开始前） | forwards(结束) | backwords(第一帧) | both(animation-direction轮流应用forwards和backwards规则)
 ```
+
+#### 雪碧图
+
+将多个图片集成在一个图片中，可以减少网络请求的次数，加快允许的速度「通过 background-position，去定位图片在屏幕的哪个位置」
+
+```bash
+# 位置
+background-position：percentage「图片百分比中心点与容器百分比中心点重合位置」「默认：0% 0%」
+		     | length | trbl
+
+# 参照物位置
+background-origin: border-box | padding-box（默认）| content-box
+
+# 平铺情况
+background-repeat: repeat-x | repeat-y | [repeat | no-repeat「background-position 决定位置」
+		   | css3 space「空白填补不被截断」 | css3 round「缩放不被截断」]{1,2} 
+
+# 向外裁剪区域
+background-clip: border-box（默认） | padding-box | content-box
+栗子 - padding-box：从 padding 区域（含 padding）开始向外裁剪背景
+		 
+background-size：大小
+```
+
 
 #
 ## 参考

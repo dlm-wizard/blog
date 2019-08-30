@@ -1,0 +1,65 @@
+## 闭包
+
+> 闭包是函数和声明该函数的词法环境的组合。
+
+> JavaScript 中闭包无处不在，你只需要能够识别并拥抱它。
+
+参考：[https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Closures](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Closures)
+
+从纯学术的角度说：
+
+闭包 = 函数 + 声明该函数的词法环境
+
+实践角度理解的闭包：
+
+1. 即使创建他的上下文已经销毁，他仍然存在（如：内部函数从父函数中返回）
+  2. 在代码中引用了自由变量「非函数变量对象的变量」
+
+
+```js
+function foo() {
+  var a = 2;
+  function bar() {
+    console.log(a);
+  }
+  return bar;
+}
+var baz = foo();
+baz(); // 2 —— 朋友，这就是闭包的效果。
+```
+简要执行
+
+> 注：词法分析阶段简称为：初始化
+
+1.进入全局代码，创建 Global context 压入 ECS。
+
+2.初始化 Global context
+
+2.执行 foo()，创建 fooFunctionContext 并压入 ECS。
+
+3.初始化 foo，创建变量对象、作用域链、this 等。
+
+4.foo 执行完毕，弹出 ESC。
+
+5.执行 bar()，创建 barFunctionContext 并压入 ESC。
+
+6.初始化 bar...bar 执行完毕，弹出 ECS
+
+我们可以注意到：当 bar 执行的时候，fooFunctionContext 已经从 ECS 中弹出了（fooFunctionContext.AO 已经被销毁了），为什么仍然可以读到 foo scope 下变量对象的值呢？
+
+以上的代码，要是转换成 PHP，就会报错，因为在 PHP 中，bar 函数只能读取到自己作用域和全局作用域里的值，所以读不到 foo 下的 scope 值。
+
+```js
+// bar 执行上下文作用域链
+// 内存中仍然存活着 fooFunctionContext !
+barFunctionContext = {
+    Scope: [AO, fooFunctionContext.AO, globalContext.VO],
+}
+```
+
+即使 fooFunctionContext 被销毁了，JavaScript 仍然会让 fooFunctionContext.AO 存活在内存当中。**正是因为 JavaScript 做到了这一点，所以实现了闭包的概念。**
+
+##
+
+[JavaScript深入之闭包](https://github.com/mqyqingfeng/Blog/issues/9)
+

@@ -1,8 +1,8 @@
 JavaScript：Weak + Dynamic
 
-<div align="center"><img src="https://uploader.shimo.im/f/LVqAXkAwwzs8N2Ci.png!thumbnail"/></div><br>
+<div align="center"><img src="https://uploader.shimo.im/f/LVqAXkAwwzs8N2Ci.png!thumbnail" width="75%" height="75%"/></div><br>
 
-<div align="center">  <img src="https://uploader.shimo.im/f/e70pHVOVjTU8J33B.png!thumbnail"/></div><br>
+<div align="center">  <img src="https://uploader.shimo.im/f/e70pHVOVjTU8J33B.png!thumbnail" width="75%" height="75%"/></div><br>
 
 弱类型语言（Weak）：隐式类型转化
 

@@ -1,8 +1,8 @@
 JavaScript：Weak + Dynamic
 
-<div align="center"><img src="https://uploader.shimo.im/f/LVqAXkAwwzs8N2Ci.png!thumbnail" width=""/></div>
+<div align="center"><img src="https://uploader.shimo.im/f/LVqAXkAwwzs8N2Ci.png!thumbnail"/></div><br>
 
-<div align="center">  <img src="https://uploader.shimo.im/f/e70pHVOVjTU8J33B.png!thumbnail" width=""/></div><br>
+<div align="center">  <img src="https://uploader.shimo.im/f/e70pHVOVjTU8J33B.png!thumbnail"/></div><br>
 
 弱类型语言（Weak）：隐式类型转化
 
@@ -31,12 +31,12 @@ JavaScript 的数据类型分为两类: primitive type and object type。
 
 主要关注其中**不同类型之间比较的隐式类型转换**规则
 
-<div align="center">  <img src="https://uploader.shimo.im/f/HMtK2OzdBB8OVaHh.png!thumbnail" width=""/></div>
-<div align="center"><img src="https://uploader.shimo.im/f/TzXpHynO4vE4a8ts.png!thumbnail" width=""/></div><br>
+<div align="center"><img src="https://uploader.shimo.im/f/HMtK2OzdBB8OVaHh.png!thumbnail" width="75%" height="75%"/></div>
+<div align="center"><img src="https://uploader.shimo.im/f/TzXpHynO4vE4a8ts.png!thumbnail" width="75%" height="75%"/></div><br>
 
 **The Abstract Equality Comparison Algorithm**
 
-![图形化表示](https://pic3.zhimg.com/80/0ea77966986b068628b17c33419e4476_hd.png)
+<div align="center"><img src="https://pic3.zhimg.com/80/0ea77966986b068628b17c33419e4476_hd.png" width="75%" height="75%"/></div>
 
 
 
@@ -91,7 +91,7 @@ String 和 Number 都是数值的序列(至少在字面上如此)。详细请参
 
 在 String 和 Number 做==运算时，需要使用 `ToNumber()` 操作
 
-<div align="center">  <img src="https://uploader.shimo.im/f/A4yeuFQ6aO4ZS1Q2.png!thumbnail" width=""/></div><br>
+<div align="center">  <img src="https://uploader.shimo.im/f/A4yeuFQ6aO4ZS1Q2.png!thumbnail" width="75%" height="75%"/></div><br>
 
 规范上描述的很复杂，简单来说就是：
 
@@ -119,7 +119,7 @@ Number('') // 0
 5. 简化为比较 `"" == 0` ， 匹配 ECMA 抽象相等比较算法条件 5，返回 `ToNumber("") == 0` ，答案显而易见为 true。
 
 
-<div align="center">  <img src="https://uploader.shimo.im/f/kXhfp4dS8K0hh9no.png!thumbnail" width=""/></div><br>
+<div align="center">  <img src="https://uploader.shimo.im/f/kXhfp4dS8K0hh9no.png!thumbnail" width="75%" height="75%"/></div><br>
 
 
 

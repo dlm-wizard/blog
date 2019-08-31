@@ -1,12 +1,13 @@
-JavaScript：Weak + Dynamic
+## JavaScript
+
+* 弱类型语言（Weak）：隐式类型转化
+
+* 动态类型（Dynamic）：执行（LHS）时确定变量的数据类型
 
 <div align="center"><img src="https://uploader.shimo.im/f/LVqAXkAwwzs8N2Ci.png!thumbnail" width="75%" height="75%"/></div><br>
 
 <div align="center">  <img src="https://uploader.shimo.im/f/e70pHVOVjTU8J33B.png!thumbnail" width="75%" height="75%"/></div><br>
 
-弱类型语言（Weak）：隐式类型转化
-
-动态类型（Dynamic）：执行（LHS）时确定变量的数据类型
 
 
 ## 数据类型

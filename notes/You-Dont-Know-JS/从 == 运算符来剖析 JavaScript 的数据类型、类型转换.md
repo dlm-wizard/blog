@@ -14,10 +14,10 @@
 
 参考：[https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures)
 
-JavaScript 的数据类型分为两类: primitive type and object type。
+JavaScript 的数据类型分为两类: `primitive type` and `object type`。
 
-* primitive - stack
-* object - heap「无法直接操纵，只能通过对象在栈中的引用」
+* `primitive type` - stack storage
+* `object type` - heap storage「无法直接操纵，只能通过对象在栈中的引用」
 
 为什么要分别用 stack 和 heap 存储呢？
 

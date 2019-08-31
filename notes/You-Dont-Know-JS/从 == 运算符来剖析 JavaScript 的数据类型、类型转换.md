@@ -12,7 +12,7 @@
 
 ## 数据类型
 
-[https://developer.mozilla.org](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures)
+参考：[https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Data_structures)
 
 JavaScript 的数据类型分为两类: primitive type and object type。
 

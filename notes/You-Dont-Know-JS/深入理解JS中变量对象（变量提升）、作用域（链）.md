@@ -20,7 +20,7 @@
 
 2. 全局对象时作用域链的头，在顶层 JavaScript 代码中声明的所有变量都将成为全局对象的属性。
 
-3. 全局对象不会被垃圾回收。「当程序结束的时候，ECS 才会被清空，ECStack 最底部永远有个 globalContext」
+3. 全局对象不会被垃圾回收。「当程序结束的时候，执行上下文栈（Execution context stack） 才会被清空，`ECS` 最底部永远有个 globalContext」
 
 
 ```js

@@ -37,6 +37,11 @@ JavaScript 的数据类型分为两类: primitive type and object type。
 
 **The Abstract Equality Comparison Algorithm**
 
+
+* N：操作数 ToNumber
+
+* P：操作数 ToPrimitive
+
 <div align="center"><img src="https://pic3.zhimg.com/80/0ea77966986b068628b17c33419e4476_hd.png" width="75%" height="75%"/></div>
 
 
@@ -60,10 +65,6 @@ null == undefined
 
 #
 ### 3. 存在世界间的转化
-
-* N：ToNumber
-
-* P：ToPrimitive
 
 `ToPrimitive(obj)` 执行过程等价于，[伪代码实现可以参照这里的ToPrimitive小节](https://juejin.im/entry/58acf34f0ce463006b1fc884/)
 
@@ -106,6 +107,14 @@ Number('') // 0
 
 3.否则返回 NaN
 
+总结：
+
+稍微分析一下对象类型与布尔类型比较时（需要由布尔先转型）的过程我们可以得出这样的结论：对象类型与原始类型比较时，全部由对象转为原始类型也是等价的。
+
+<div align="center">  <img src="https://pic2.zhimg.com/80/0fc2dd69d7f9d4083f347784446b7f0d_hd.png" width="75%" height="75%"/></div><br>
+
+1. 记住那些内置对象的 `toString()` 和 `valueOf()` 方法的规则。包括 `Object、Array、Date、Number、String、Boolean` 等
+
 
 ## 举个栗子：[]==![]
 
@@ -113,7 +122,7 @@ Number('') // 0
 
 2. 匹配 ECMA 抽象相等比较算法条件 8，返回比较 `x == ToNumber(y)` 。
 
-3. ToNumber(true) = 1，即转化为比较 `x == 1` ， 匹配 ECMA 抽象相等比较算法条件 10，，返回比较 `ToPrimitive(x) == y` 。
+3. ToNumber(true) = 1，即转化为比较 `x == 1` ， 匹配 ECMA 抽象相等比较算法条件 10，返回比较 `ToPrimitive(x) == y` 。
 
 4. `[].valueOf()` ，返回值为 []，继续计算 `[].toString()` ，返回 "" 字符串。
 
@@ -121,12 +130,6 @@ Number('') // 0
 
 
 <div align="center">  <img src="https://uploader.shimo.im/f/kXhfp4dS8K0hh9no.png!thumbnail" width="75%" height="75%"/></div><br>
-
-
-
-
-
-
 
 
 

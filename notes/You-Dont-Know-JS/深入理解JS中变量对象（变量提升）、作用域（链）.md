@@ -29,6 +29,8 @@ console.log(this === window); // true
 
 ## Function context
 
+[有关函数作用域、IIFE 立即执行函数与块级作用域的知识点](https://github.com/dlm-wizard/blog/issues/23)
+
 ## 变量对象 (Variable object，VO)
 
 变量对象：执行上下文相关的数据作用域，存储当前作用域中的变量和函数声明。

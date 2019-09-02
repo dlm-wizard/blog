@@ -44,9 +44,9 @@ one. __proto__ = Object.prototype
 参考：[https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
 
 
-* in 操作符：属性是否存在对象及其 [[Prototype]] 原型链中。
+* `in` 操作符：属性是否存在对象及其 [[Prototype]] 原型链中。
 
-* hasOwnProperty：只会检查属性是否存在于对象中。
+* `hasOwnProperty`：只会检查属性是否存在于对象中。
 
 属性包括名字（字符串）和值（任意 JavaScript 数据类型）。除此之外，每个属性还有一些与之相关的值，称为"属性特性"`（property attribute）` 。
 

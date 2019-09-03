@@ -6,4 +6,4 @@
 
 3.[深入闭包之-继续访问词法作用域](https://github.com/dlm-wizard/blog/blob/master/notes/You-Dont-Know-JS/%E6%B7%B1%E5%85%A5%E9%97%AD%E5%8C%85%E4%B9%8B-%E7%BB%A7%E7%BB%AD%E8%AE%BF%E9%97%AE%E8%AF%8D%E6%B3%95%E4%BD%9C%E7%94%A8%E5%9F%9F.md)
 
-4.[深入理解JS对象之原型与原型链](https://github.com/dlm-wizard/blog/edit/master/notes/You-Dont-Know-JS/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E5%AF%B9%E8%B1%A1%E4%B9%8B%E5%8E%9F%E5%9E%8B%E4%B8%8E%E5%8E%9F%E5%9E%8B%E9%93%BE.md)
+4.[深入理解JS对象之原型与原型链](https://github.com/dlm-wizard/blog/blob/master/notes/You-Dont-Know-JS/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E5%AF%B9%E8%B1%A1%E4%B9%8B%E5%8E%9F%E5%9E%8B%E4%B8%8E%E5%8E%9F%E5%9E%8B%E9%93%BE.md)

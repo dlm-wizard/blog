@@ -149,48 +149,5 @@ Object.prototype.__proto__ = null
 
 [从__proto__和prototype来深入理解JS对象和原型链](https://github.com/creeperyang/blog/issues/9)
 
-[JavaScript深入之从原型到原型链](https://github.com/mqyqingfeng/Blog/issues/2)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-> JavaScript 核心特征：原型继承（prototypal inheritance）
-
-##
-
-[从__proto__和prototype来深入理解JS对象和原型链](https://github.com/creeperyang/blog/issues/9)
-
 [ES6 系列之 defineProperty 与 proxy](https://github.com/mqyqingfeng/Blog/issues/107)
 

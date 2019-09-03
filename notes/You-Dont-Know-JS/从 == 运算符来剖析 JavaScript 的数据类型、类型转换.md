@@ -1,8 +1,7 @@
-## JavaScript
+## JavaScript 语言类型
 
-* 弱类型语言（Weak）：隐式类型转化
-
-* 动态类型（Dynamic）：执行（LHS）时确定变量的数据类型
+* 弱类型语言`Weak`：隐式类型转化
+* 动态类型`Dynamic`：执行（LHS）时确定变量的数据类型
 
 <div align="center"><img src="https://uploader.shimo.im/f/LVqAXkAwwzs8N2Ci.png!thumbnail" width="75%" height="75%"/></div><br>
 
@@ -26,7 +25,7 @@ JavaScript 的数据类型分为两类: `primitive type` and `object type`。
 <div align="center">  <img src="https://pic1.zhimg.com/80/v2-c69bc8d698afe4328206592f3c3a89a2_hd.jpg" width=""/></div><br>
 
 
-## 从 '=='运算 开始了解类型转换
+## 从 '==' 运算 开始了解类型转换
 
 [ECAMScript 11.9.3 中的定义](https://yanhaijing.com/es5/#203)
 

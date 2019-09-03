@@ -37,9 +37,8 @@ JavaScript 的数据类型分为两类: `primitive type` and `object type`。
 **The Abstract Equality Comparison Algorithm**
 
 
-* N：操作数 ToNumber
-
-* P：操作数 ToPrimitive
+* N：操作数 `ToNumber`
+* P：操作数 `ToPrimitive`
 
 <div align="center"><img src="https://pic3.zhimg.com/80/0ea77966986b068628b17c33419e4476_hd.png" width="75%" height="75%"/></div>
 
@@ -90,7 +89,7 @@ false -> 0
 
 String 和 Number 都是数值的序列(至少在字面上如此)。详细请参考[ECAMScript 8.4 String 类型 8.5 Number 类型](https://yanhaijing.com/es5/#203)
 
-在 String 和 Number 做==运算时，需要使用 `ToNumber()` 操作
+在 String 和 Number 做 `==` 运算时，需要使用 `ToNumber()` 操作
 
 <div align="center">  <img src="https://uploader.shimo.im/f/A4yeuFQ6aO4ZS1Q2.png!thumbnail" width="75%" height="75%"/></div><br>
 
@@ -113,6 +112,47 @@ Number('') // 0
 <div align="center">  <img src="https://pic2.zhimg.com/80/0fc2dd69d7f9d4083f347784446b7f0d_hd.png" width="75%" height="75%"/></div><br>
 
 1. 记住那些内置对象的 `toString()` 和 `valueOf()` 方法的规则。包括 `Object、Array、Date、Number、String、Boolean` 等。
+
+
+```js
+Object.prototype.toString()
+```
+
+> When the toString method is called, the following steps are taken:
+
+> 1.If the this value is undefined, return "[object Undefined]".
+2.If the this value is null, return "[object Null]".
+3.Let O be the result of calling ToObject passing the this value as the argument. -- 让 O 成为 ToObject(this) 的结果
+4.Let class be the value of the [[Class]] internal property of O.
+5.Return the String value that is the result of concatenating the three Strings "[object ", class, and "]".
+
+简单来说就是调用 Object.prototype.toString 会返回一个由 "[object " 和 class 和 "]" 组成的字符串，而 class 是要判断的对象的内部属性。
+
+
+
+```js
+Object.prototype.valueOf()
+```
+
+> 1.Let O be the result of calling ToObject passing the this value as the argument.
+2.If O is the result of calling the Object constructor with a host object (15.2.2.1), then Return either O or another value such as the host object originally passed to the constructor. The specific result that is returned is implementation-defined. -- 返回的具体结果由实现定义
+3.Return O.
+
+
+`Function.prototype.toString()`
+```js
+返回一个表示当前函数源代码的字符串
+```
+
+`Array.prototype.toString()`
+```js
+连接数组并返回一个字符串，其中包含用逗号分隔的每个数组元素。
+```
+
+
+```js
+Object.prototype.toString()
+```
 
 2. 万物皆数。
 

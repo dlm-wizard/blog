@@ -141,6 +141,8 @@ Object.prototype.__proto__ = null
 
 ## 参考
 
+[Js对象与defineProperty](https://github.com/dlm-wizard/blog/issues/24)
+
 [从__proto__和prototype来深入理解JS对象和原型链](https://github.com/creeperyang/blog/issues/9)
 
 [ES6 系列之 defineProperty 与 proxy](https://github.com/mqyqingfeng/Blog/issues/107)

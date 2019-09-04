@@ -204,7 +204,9 @@ routes: [
 7. $route.name # 传参
 
 # $router: 路由实例 -- 根组件注入到所有子组件
-new VueRouter({})， this.$router.模拟：
+new VueRouter({})， 
+
+this.$router.模拟 history 可以轻松的在 history stack 向前或退后：
 1. go() [window.history.go]
 2. replace [window.history.replaceState]
 3. push [window.history.pushState]
@@ -271,3 +273,8 @@ routes: [{
 # route 中构建子路由
 router-view 是最顶层的出口，渲染最高级路由匹配到的组件。同样地，一个被渲染组件同样可以包含自己的嵌套 router-view
 ```
+
+#
+### 九：导航守卫
+
+#### waiting...

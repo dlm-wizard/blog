@@ -84,12 +84,12 @@ const router = new VueRouter({})
     components?: { [name: string]: Component }; // 命名视图组件
     redirect?: string | Location | Function;
     props?: // 路由参数传递
-     1. boolean: 「props: {params: route.params}」
-     2. Object: 「props: 静态对象」
-     3. Function: 「props: 动态对象」
+     a. boolean: 「props: {params: route.params}」
+     b. Object: 「props: 静态对象」
+     c. Function: 「props: 动态对象」
     alias?: string | Array<string>;
     children?: Array<RouteConfig>; // 嵌套路由
-    beforeEnter?: (to: Route, from: Route, next: Function) => void;
+    beforeEnter?: (to: Route, from: Route, next: Function) => void; // 路由独享的守卫
     meta?: any;
     
     caseSensitive?: boolean; // 匹配规则是否大小写敏感？(默认值：false)
@@ -200,7 +200,12 @@ routes: [
 3. $route.query: {key: value} # query
 4. $route.hash
 5. $route.fullPath # 包含 query、hash
-6. $route.matched # routes 对象副本
+6. $route.matched # 当前路由记录
+
+```
+路由记录：routes 配置中的每个路由对象
+```
+
 7. $route.name # 传参
 
 # $router: 路由实例 -- 根组件注入到所有子组件
@@ -275,6 +280,94 @@ router-view 是最顶层的出口，渲染最高级路由匹配到的组件。�
 ```
 
 #
-### 九：导航守卫
+### 九：[`导航`守卫](https://router.vuejs.org/zh/guide/advanced/navigation-guards.html#%E5%85%A8%E5%B1%80%E5%89%8D%E7%BD%AE%E5%AE%88%E5%8D%AB)
+
+> 你可以将导航守卫视为传统中间件的钩子。
+
+- `导航`表示路由正在发生变化!
+- `守护`表示`导航`前定义的`异步守护钩子函数`
+
+**组件内的`守卫`**
+
+```
+export default {
+  beforeRouteEnter (to, from, next) {
+    // 在组件的对应路由被 confirm 前调用
+    // 不！能！获取组件实例 `this`「在路由确认前组件还未创建」
+    // 通过 next 回调异步访问组件实例
+    next(vm => {
+      // vm 代替不能被调用的 `this`
+    })
+  },
+  beforeRouteUpdate (to, from, next) {
+    // 举栗：对于一个动态路由 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，会渲染同样的 Foo 组件
+  },
+  beforeRouteLeave (to, from, next) {
+    // 导航离开该组件的对应路由时调用
+  }
+};
+```
+
+**全局`守卫`**
+- [全局前置守卫](https://router.vuejs.org/zh/guide/advanced/navigation-guards.html#%E5%85%A8%E5%B1%80%E5%89%8D%E7%BD%AE%E5%AE%88%E5%8D%AB)`router.beforeEach`
+
+```
+const router = new VueRouter({ ... })
+router.beforeEach((to, from, next) => {
+  // ...
+})
+```
+
+`守护函数（钩子）`是异步执行的，`导航`在该`守护函数 resolve` 之前一直处于**等待中**。
+
+`next`用来 `resolve 这个钩子`，
+
+1. `next()`
+
+```
+继续管道中下一钩子。
+如果所有钩子都执行完成，导航 bingo（跳转路由被确认 -> confirmed）.
+```
+
+2. `next({ router })`
+
+```
+跳转到一个不同的地址，当前的导航被中断。
+```
+
+**全局`后置守卫（钩子）`**
+
+```
+router.afterEach((to, from) => {
+  // 不接受 next、改变导航本身
+})
+```
+
+
+完整的`导航`流程：
+
+1. `导航`被触发。
+1. 在失活的组件里调用 `beforeRouteLeave`。
+1. 调用全局的 `beforeEach` 守卫。
+1. 调用`动态路由（重用的组件）`里 `beforeRouteUpdate` 守卫 (2.2+)。
+1. 调用路由配置里 `beforeEnter`。
+1. **解析异步路由组件**（不太理解）。
+1. 在被激活的组件里调用 `beforeRouteEnter`。
+1. 调用全局的 `beforeResolve` 守卫 (2.5+)（不太理解）。
+1. 路由 is confirmed（不太理解）。
+1. 调用全局的 `afterEach` 钩子。
+1. 触发 DOM 更新。
+1. `beforeRouteEnter.next(vm => {})`。
+
+主要通过跳转或取消的方式守护导航。`params(参数)`或`query(查询)`改变并不会触发导航守卫。你可以通过观察 $route 对象来应对这些变化。
+
+
+
+- [全局解析守卫](https://router.vuejs.org/zh/guide/advanced/navigation-guards.html#%E5%85%A8%E5%B1%80%E8%A7%A3%E6%9E%90%E5%AE%88%E5%8D%AB)（2.5.0 新增）
+
+#
+### 十：路由 meta
+
+可以存储我们所需要的信息，创建高级路由逻辑。比如：导航守卫。
 
 #### waiting...

@@ -180,7 +180,10 @@ routes: [
 注：生命周期钩子不会再调用
 
 # 响应
-1. <router-view :key="$route.path" /> // 需要组件重新创建data
+// Vue 会复用相同的组件，将不会执行 created、mounted 钩子
+// 需要组件重新创建data
+// $route.path 强制组件不被复用
+1. <router-view :key="$route.path" /> 
 
 2. watch: {
     '$route' (to, from) { // 对路由变化作出响应... }

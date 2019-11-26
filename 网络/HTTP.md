@@ -334,6 +334,8 @@ http 对每种需要由 web 传输的对象都打上了名为 MIME 类型的数�
 	
 ### 2.3 url( Universal Resource Locator )
 
+[HTTP 协议中 URI 和 URL 有什么区别？](https://www.zhihu.com/question/21950864)
+
 uri( Universal Resource Identifier )：url 是 uri 的子集
 
 > 统一资源定位符

@@ -172,7 +172,7 @@
     	microtask 主要包含：
     	  Promise、process.nextTick（process.nextTick(callback)类似node.js版的"setTimeout"）
 	  
-    
+   
 	举个栗子：    
 	    console.log(1)
 										答案：
